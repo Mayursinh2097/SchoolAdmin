@@ -32,6 +32,16 @@ Route::post('school/store',[SchoolController::class, 'store']);
 Route::post('school/update',[SchoolController::class, 'update']);
 Route::post('deleteschool',[SchoolController::class, 'destroy']);
 
+//Class
 Route::get('class',[SchoolController::class, 'viewClass']);
-Route::get('class/addClass',[SchoolController::class, 'addClass']);
+Route::post('class/addClass',[SchoolController::class, 'addClass']);
+Route::get('class/{id}/edit',[SchoolController::class, 'editClass']);
+Route::post('class/updateclass',[SchoolController::class, 'updateClass']);
 Route::post('deleteclass',[SchoolController::class, 'deleteClass']);
+
+//Division
+Route::get('division',[SchoolController::class, 'viewDivision']);
+Route::post('division/adddivision',[SchoolController::class, 'addDivision']);
+Route::get('division/{id}/edit',[SchoolController::class, 'editDivision']);
+Route::post('division/updatedivision',[SchoolController::class, 'updateDivision']);
+Route::post('deletedivision',[SchoolController::class, 'deleteDivision']);

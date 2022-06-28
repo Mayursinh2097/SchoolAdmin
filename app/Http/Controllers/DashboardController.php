@@ -24,7 +24,7 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $data = Session::all();
-        $school_id = $data['school_id'];
+        // $school_id = $data['school_id'];
         // $year_id = $_COOKIE['year'];
         $school_id = $_COOKIE['user'];
         $year_id = $_COOKIE['year'];

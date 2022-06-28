@@ -2,7 +2,7 @@
 <li class="{{ Request::is('dashboard') ? 'active':'' }}">
     <a href="{{url('dashboard')}}" title="Dashboard"><span class="fa fa-desktop"></span> <span class="xn-text">Dashboard</span></a>                        
 </li> 
-<li class="xn-openable {{ Request::is('school*') ? 'active':'' }} || {{ Request::is('class*') ? 'active':'' }}">
+<li class="xn-openable {{ Request::is('school*') ? 'active':'' }} || {{ Request::is('class*') ? 'active':'' }} || {{ Request::is('division*') ? 'active':'' }}">
     <a href="#"><span class="fa fa-gears"></span> <span class="xn-text">School</span></a>
     <ul>
         <li class="{{ Request::is('school*') ? 'active':'' }}">
@@ -11,8 +11,8 @@
         <li class="{{ Request::is('class') ? 'active':'' }}">
             <a href="{{url('/class')}}" title="Class Management"><span class="fa fa-circle-o"></span>Class Management</a>
         </li>
-        <li class="{{ Request::is('add_div') ? 'active':'' }}">
-            <a href="{{url('/add_div')}}" title="Division Management"><span class="fa fa-circle-o"></span>Division Management</a>
+        <li class="{{ Request::is('division') ? 'active':'' }}">
+            <a href="{{url('/division')}}" title="Division Management"><span class="fa fa-circle-o"></span>Division Management</a>
         </li>
         <li class="{{ Request::is('add_state') ? 'active':'' }}">
             <a href="{{url('/add_state')}}" title="State Management"><span class="fa fa-circle-o"></span>State Management</a>
