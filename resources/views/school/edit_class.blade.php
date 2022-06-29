@@ -15,11 +15,12 @@
         <div class="row">
             <div class="col-md-12">
                 <form id="add_role_form" class="form-horizontal" enctype="multipart/form-data" >
+                    {{csrf_field()}}
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title"><strong>Edit Class</strong> </h3>
                             <ul class="panel-controls">
-                                <li><a href="{{ url('/class') }}" class="panel-remove" title="Cancel"><span class="fa fa-times"></span></a></li>
+                                <li><a href="{{url('class')}}" class="panel-remove" title="Cancel"><span class="fa fa-times"></span></a></li>
                             </ul>
                         </div>
                         <div class="panel-body">
@@ -76,6 +77,20 @@
                 <div class="mb-footer"></div>
             </div>
         </div>
+    </div>
+
+    <div class="message-box message-box-danger animated fadeIn" id="message-box-danger12">
+        <div class="mb-container">
+            <div class="mb-middle">
+                <div class="mb-title"><span class="fa fa-times"></span>Error</div>
+                <div class="mb-content">
+                    <p> Class already inserted.</p>
+                </div>
+                <div class="mb-footer">
+                    <!-- <button class="btn btn-default btn-lg pull-right mb-control-close">Close</button> -->
+                </div>
+            </div>
+        </div>
     </div>  
 
     <div class="message-box message-box-danger animated fadeIn" id="message-box-danger123">
@@ -90,21 +105,8 @@
         </div>
     </div>
 
-    <div class="message-box message-box-danger animated fadeIn" id="message-box-danger4">
-        <div class="mb-container">
-            <div class="mb-middle">
-                <div class="mb-title"><span class="fa fa-times"></span> Error</div>
-                <div class="mb-content">
-                    <p style="font-size: 15px;"> Error to delete.</p>
-                </div>
-                <div class="mb-footer">
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- PAGE CONTENT WRAPPER -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>  
     <script type="text/javascript" src="{{ asset('js/plugins/jquery-validation/jquery.validate.js') }}"></script>
     <script type="text/javascript">
 
@@ -162,6 +164,11 @@
                             $("#message-box-success").modal('hide');
                         }, 1500);
                         location.href="{{ url('/class') }}";
+                    }
+                    else if(response.success==2)
+                    {
+                        $("#message-box-danger12").modal('show');
+                        setTimeout(function(){ $("#message-box-danger12").modal('hide') }, 1500);
                     }
                     else
                     {

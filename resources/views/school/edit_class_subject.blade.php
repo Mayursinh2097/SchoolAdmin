@@ -6,7 +6,7 @@
     <ul class="breadcrumb">
         <li><a href="#">Home</a></li>
         <li>School</li>
-        <li class="active">Edit Division</li>
+        <li class="active">Edit Class Subject</li>
     </ul>
     <!-- END BREADCRUMB --   >           
 
@@ -17,9 +17,9 @@
                 <form id="add_role_form" class="form-horizontal" enctype="multipart/form-data" >
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title"><strong>Edit Division</strong> </h3>
+                            <h3 class="panel-title"><strong>Edit Class Subject</strong> </h3>
                             <ul class="panel-controls">
-                                <li><a href="{{ url('/division') }}" class="panel-remove" title="Cancel"><span class="fa fa-times"></span></a></li>
+                                <li><a href="{{ url('/allocateClassSubject') }}" class="panel-remove" title="Cancel"><span class="fa fa-times"></span></a></li>
                             </ul>
                         </div>
                         <div class="panel-body">
@@ -31,20 +31,24 @@
                                         <?php   
                                             foreach($classes as $key => $cl){
                                         ?> 
-                                            <option value="<?php echo $cl->ClassId; ?>"<?php if($division->ClassId==$cl->ClassId){ echo "selected"; } ?>> <?php echo $cl->ClassName; ?></option>
+                                            <option value="<?php echo $cl->ClassId; ?>"<?php if($subjectMaster->ClassId==$cl->ClassId){ echo "selected"; } ?>> <?php echo $cl->ClassName; ?></option>
                                         <?php } ?> 
                                     </select>
                                     <span class="help-block">Fill up the text field</span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Division Name</label>
+                                <label class="col-md-3 col-xs-12 control-label">Class Name</label>
                                 <div class="col-md-6 col-xs-12">                                            
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" id="DivisionName" name="DivisionName" value="{{ $division->DivisionName }}">
-                                        <input type="hidden" class="form-control" id="DivisionId" name="DivisionId" value="{{ $division->DivisionId }}" />
-                                    </div>                                            
+                                    <select class="form-control" name="SubjectName" id="SubjectName">
+                                        <option value="">Select</option>
+                                        <?php   
+                                            foreach($subjects as $key => $sm){
+                                        ?> 
+                                            <option value="<?php echo $sm->id; ?>"<?php if($subjectMaster->SubjectName==$sm->id){ echo "selected"; } ?>> <?php echo $sm->subject; ?></option>
+                                        <?php } ?> 
+                                    </select>
+                                    <input type="hidden" class="form-control" id="SubjectId" name="SubjectId" value="{{ $subjectMaster->SubjectId }}" />
                                     <span class="help-block">Fill up the text field</span>
                                 </div>
                             </div>
@@ -63,7 +67,7 @@
             <div class="mb-middle">
                 <div class="mb-title"><span class="fa fa-check"></span> Success</div>
                 <div class="mb-content">
-                    <p style="font-size: 15px;">Division edited successfully.</p>
+                    <p style="font-size: 15px;">Subject edited successfully.</p>
                 </div>
                 <div class="mb-footer"></div>
             </div>
@@ -75,7 +79,7 @@
             <div class="mb-middle">
                 <div class="mb-title"><span class="fa fa-times"></span>Error</div>
                 <div class="mb-content">
-                    <p> Division already inserted.</p>
+                    <p> Subject already inserted.</p>
                 </div>
                 <div class="mb-footer">
                     <!-- <button class="btn btn-default btn-lg pull-right mb-control-close">Close</button> -->
@@ -98,14 +102,13 @@
 
     <!-- PAGE CONTENT WRAPPER -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>  
     <script type="text/javascript" src="{{ asset('js/plugins/jquery-validation/jquery.validate.js') }}"></script>
     <script type="text/javascript">
 
         var validator = $("#add_role_form").validate({
             rules: {
                 ClassId: { required: true },
-                DivisionName: { required: true } 
+                SubjectName: { required: true } 
             },
             submitHandler: function(form) 
             { 
@@ -115,21 +118,21 @@
         function editDivision()
         {
             var ClassId = $('#ClassId').val();
-                DivisionName = $('#DivisionName').val();
-                DivisionId = $('#DivisionId').val();
+                SubjectName = $('#SubjectName').val();
+                SubjectId = $('#SubjectId').val();
                 school_id = '<?php echo $school_id; ?>';
                 year_id = '<?php echo $year_id; ?>';
                 // alert(school_id);
 
             var formData = new FormData($('#add_role_form')[0]);
                 formData.append("ClassId", ClassId);
-                formData.append("DivisionName", DivisionName);
+                formData.append("SubjectName", SubjectName);
                 formData.append("school_id", school_id);
                 formData.append("year_id", year_id);
-                formData.append("DivisionId", DivisionId);
+                formData.append("SubjectId", SubjectId);
 
             $.ajax({
-                url: "{{ url('division/updatedivision') }}",
+                url: "{{ url('allocateClassSubject/updateClassSubject') }}",
                 method: 'post',
                 contentType: false,
                 processData: false,
@@ -147,7 +150,7 @@
                         setTimeout(function(){ 
                             $("#message-box-success").modal('hide');
                         }, 1500);
-                        location.href="{{ url('/division') }}";
+                        location.href="{{ url('/allocateClassSubject') }}";
                     }
                     else if(response.success==2)
                     {

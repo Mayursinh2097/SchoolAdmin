@@ -6,7 +6,7 @@
     <ul class="breadcrumb">
         <li><a href="#">Home</a></li>
         <li>School</li>
-        <li class="active">Edit Division</li>
+        <li class="active">Edit Religion</li>
     </ul>
     <!-- END BREADCRUMB --   >           
 
@@ -17,33 +17,19 @@
                 <form id="add_role_form" class="form-horizontal" enctype="multipart/form-data" >
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title"><strong>Edit Division</strong> </h3>
+                            <h3 class="panel-title"><strong>Edit Religion</strong> </h3>
                             <ul class="panel-controls">
-                                <li><a href="{{ url('/division') }}" class="panel-remove" title="Cancel"><span class="fa fa-times"></span></a></li>
+                                <li><a href="{{ url('/religion') }}" class="panel-remove" title="Cancel"><span class="fa fa-times"></span></a></li>
                             </ul>
                         </div>
                         <div class="panel-body">
                             <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Class Name</label>
-                                <div class="col-md-6 col-xs-12">                                            
-                                    <select class="form-control" name="ClassId" id="ClassId">
-                                        <option value="">Select</option>
-                                        <?php   
-                                            foreach($classes as $key => $cl){
-                                        ?> 
-                                            <option value="<?php echo $cl->ClassId; ?>"<?php if($division->ClassId==$cl->ClassId){ echo "selected"; } ?>> <?php echo $cl->ClassName; ?></option>
-                                        <?php } ?> 
-                                    </select>
-                                    <span class="help-block">Fill up the text field</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Division Name</label>
+                                <label class="col-md-3 col-xs-12 control-label">Religion Name</label>
                                 <div class="col-md-6 col-xs-12">                                            
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" id="DivisionName" name="DivisionName" value="{{ $division->DivisionName }}">
-                                        <input type="hidden" class="form-control" id="DivisionId" name="DivisionId" value="{{ $division->DivisionId }}" />
+                                        <input type="text" class="form-control" id="ReligionName" name="ReligionName" value="{{ $religion->ReligionName }}">
+                                        <input type="hidden" class="form-control" id="ReligionId" name="ReligionId" value="{{ $religion->ReligionId }}" />
                                     </div>                                            
                                     <span class="help-block">Fill up the text field</span>
                                 </div>
@@ -63,26 +49,26 @@
             <div class="mb-middle">
                 <div class="mb-title"><span class="fa fa-check"></span> Success</div>
                 <div class="mb-content">
-                    <p style="font-size: 15px;">Division edited successfully.</p>
+                    <p style="font-size: 15px;">Religion edited successfully.</p>
                 </div>
                 <div class="mb-footer"></div>
             </div>
         </div>
-    </div>
+    </div> 
 
     <div class="message-box message-box-danger animated fadeIn" id="message-box-danger123">
         <div class="mb-container">
             <div class="mb-middle">
                 <div class="mb-title"><span class="fa fa-times"></span>Error</div>
                 <div class="mb-content">
-                    <p> Division already inserted.</p>
+                    <p> Religion already inserted.</p>
                 </div>
                 <div class="mb-footer">
                     <!-- <button class="btn btn-default btn-lg pull-right mb-control-close">Close</button> -->
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 
     <div class="message-box message-box-danger animated fadeIn" id="message-box-danger45">
         <div class="mb-container">
@@ -104,32 +90,29 @@
 
         var validator = $("#add_role_form").validate({
             rules: {
-                ClassId: { required: true },
-                DivisionName: { required: true } 
+                ReligionName: { required: true } 
             },
             submitHandler: function(form) 
             { 
-                editDivision();
+                editReligion();
             }
         });
-        function editDivision()
+        function editReligion()
         {
-            var ClassId = $('#ClassId').val();
-                DivisionName = $('#DivisionName').val();
-                DivisionId = $('#DivisionId').val();
+            var ReligionName = $('#ReligionName').val();
+                ReligionId = $('#ReligionId').val();
                 school_id = '<?php echo $school_id; ?>';
                 year_id = '<?php echo $year_id; ?>';
                 // alert(school_id);
 
             var formData = new FormData($('#add_role_form')[0]);
-                formData.append("ClassId", ClassId);
-                formData.append("DivisionName", DivisionName);
+                formData.append("ReligionName", ReligionName);
                 formData.append("school_id", school_id);
                 formData.append("year_id", year_id);
-                formData.append("DivisionId", DivisionId);
+                formData.append("ReligionId", ReligionId);
 
             $.ajax({
-                url: "{{ url('division/updatedivision') }}",
+                url: "{{ url('religion/updatereligion') }}",
                 method: 'post',
                 contentType: false,
                 processData: false,
@@ -141,18 +124,18 @@
                 success: function(data) {
 
                     var response = JSON.parse(data);
-                    if(response.success==1)
+                    if(response.success == 1)
                     {
                         $("#message-box-success").modal('show');
                         setTimeout(function(){ 
                             $("#message-box-success").modal('hide');
                         }, 1500);
-                        location.href="{{ url('/division') }}";
+                        location.href="{{ url('/religion') }}";
                     }
-                    else if(response.success==2)
+                    else if(response.success == 2)
                     {
                         $("#message-box-danger123").modal('show');
-                        setTimeout(function(){ $("#message-box-danger123").modal('hide') }, 1500);
+                        setTimeout(function(){ location.reload(); }, 1500);
                     }
                     else
                     {

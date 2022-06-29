@@ -7,6 +7,12 @@ use App\Models\User;
 use App\Models\School;
 use App\Models\SchoolClass;
 use App\Models\SchoolClassDiv;
+use App\Models\State;
+use App\Models\District;
+use App\Models\Religion;
+use App\Models\Subject;
+use App\Models\SchoolHoliday;
+use App\Models\SubjectMaster;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
@@ -302,6 +308,7 @@ class SchoolController extends Controller
                 ->Where('class_type', 'like', '%' . $request->class_type . '%')
                 ->Where('ClassName', 'like', '%' . $request->ClassName . '%')
                 ->Where('stream', $request->stream)
+                ->where('IsDelete', '=', '0')
                 ->first();
 
         // dd(\DB::getQueryLog());
@@ -377,24 +384,39 @@ class SchoolController extends Controller
         }else{
             $school_id =  $data['school_id'];
         }
-        
-        $sc = SchoolClass::where('ClassId', $request->ClassId)
-                ->update(['class_type' => $request->class_type, 'ClassName' => $request->ClassName, 'stream' => $request->stream, 'UpdatedBy' => $sid, 'UpdateDTTM' => $date]);
 
-        if ($sc == true)
+        $class = SchoolClass::where('school_id', $request->school_id)
+                ->Where('class_type', $request->class_type)
+                ->Where('ClassName', $request->ClassName)
+                ->Where('stream', $request->stream)
+                ->where('IsDelete', '=', '0')
+                ->first();
+        if($class == false)
         {
+            $sc = SchoolClass::where('ClassId', $request->ClassId)
+                    ->update(['class_type' => $request->class_type, 'ClassName' => $request->ClassName, 'stream' => $request->stream, 'UpdatedBy' => $sid, 'UpdateDTTM' => $date]);
+
+            if ($sc == true)
+            {
+                $data = array();
+                $data['success'] = '1';
+                $data['error'] = 'fasle';
+                $data['message'] = 'Updated Successfully';
+                return json_encode($data);
+            } 
+            else 
+            {
+                $data = array();
+                $data['success'] = '0';
+                $data['error'] = 'true';
+                $data['message'] = 'Somthing Wrong!!';
+                return json_encode($data);
+            }
+        }else{
             $data = array();
-            $data['success'] = '1';
-            $data['error'] = 'fasle';
-            $data['message'] = 'Updated Successfully';
-            return json_encode($data);
-        } 
-        else 
-        {
-            $data = array();
-            $data['success'] = '0';
+            $data['success'] = '2';
             $data['error'] = 'true';
-            $data['message'] = 'Somthing Wrong!!';
+            $data['message'] = 'Class is already exist';
             return json_encode($data);
         }
     }
@@ -471,6 +493,7 @@ class SchoolController extends Controller
         $division = SchoolClassDiv::where('school_id', $request->school_id)
                 ->Where('ClassId', $request->ClassId)
                 ->Where('DivisionName', 'like', '%' . $request->DivisionName . '%')
+                ->where('IsDelete', '=', '0')
                 ->first();
 
         // dd(\DB::getQueryLog());
@@ -548,24 +571,40 @@ class SchoolController extends Controller
         }else{
             $school_id =  $data['school_id'];
         }
-        
-        $scd = SchoolClassDiv::where('DivisionId', $request->DivisionId)
-                ->update(['ClassId' => $request->ClassId, 'DivisionName' => $request->DivisionName, 'UpdatedBy' => $sid, 'UpdateDTTM' => $date]);
 
-        if ($scd == true)
+        $division = SchoolClassDiv::where('school_id', $request->school_id)
+                ->Where('ClassId', $request->ClassId)
+                ->Where('DivisionName', $request->DivisionName)
+                ->where('IsDelete', '=', '0')
+                ->first();
+
+        if($division == false)
         {
+        
+            $scd = SchoolClassDiv::where('DivisionId', $request->DivisionId)
+                    ->update(['ClassId' => $request->ClassId, 'DivisionName' => $request->DivisionName, 'UpdatedBy' => $sid, 'UpdateDTTM' => $date]);
+
+            if ($scd == true)
+            {
+                $data = array();
+                $data['success'] = '1';
+                $data['error'] = 'fasle';
+                $data['message'] = 'Updated Successfully';
+                return json_encode($data);
+            } 
+            else 
+            {
+                $data = array();
+                $data['success'] = '0';
+                $data['error'] = 'true';
+                $data['message'] = 'Somthing Wrong!!';
+                return json_encode($data);
+            }
+        }else{
             $data = array();
-            $data['success'] = '1';
-            $data['error'] = 'fasle';
-            $data['message'] = 'Updated Successfully';
-            return json_encode($data);
-        } 
-        else 
-        {
-            $data = array();
-            $data['success'] = '0';
+            $data['success'] = '2';
             $data['error'] = 'true';
-            $data['message'] = 'Somthing Wrong!!';
+            $data['message'] = 'Division is already exist';
             return json_encode($data);
         }
     }
@@ -596,5 +635,1077 @@ class SchoolController extends Controller
         }
     }
 
-    ////////////////////////// Division //////////////////////////
+    ////////////////////////// End Division //////////////////////////
+
+    ////////////////////////// State //////////////////////////
+
+    public function viewState()
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $states = State::select('state_master.*')
+            ->where('IsDelete', '=', '0')
+            ->orderby('state_id', 'asc')
+            ->get();
+
+        return view('school.state', compact('states', 'school_id', 'year_id'));
+    }
+
+    public function addState(Request $request) 
+    {
+        $data = Session::all();
+        $sid = $data['sid'];
+        // \DB::enableQueryLog();
+
+        $state = State::Where('state_name', 'like', '%' . $request->state_name . '%')
+                ->where('IsDelete', '=', '0')
+                ->first();
+
+        // dd(\DB::getQueryLog());
+        if($state == false)
+        {
+            $st = new State();
+            $st->state_name = $request->state_name;
+            $st->CreatedBy = $sid;
+            $st->save();
+            
+            if ($st == true)
+            {
+                $data = array();
+                $data['success'] = '1';
+                $data['error'] = 'fasle';
+                $data['message'] = 'Inserted Successfully';
+                return json_encode($data);
+            } 
+            else 
+            {
+                $data = array();
+                $data['success'] = '0';
+                $data['error'] = 'true';
+                $data['message'] = 'Somthing Wrong!!';
+                return json_encode($data);
+            }
+        }else{
+            $data = array();
+            $data['success'] = '2';
+            $data['error'] = 'true';
+            $data['message'] = 'State is already exist';
+            return json_encode($data);
+        }
+    }
+
+    public function editState($id)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $state = State::where('state_id', '=', $id)
+            ->where('IsDelete', '=', '0')
+            ->first();
+
+        return view('school.edit_state',compact('state', 'school_id', 'year_id'));
+    }
+
+    public function updateState(Request $request)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+        $date = date('Y-m-d H:i:s');
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $state = State::Where('state_name', $request->state_name)->where('IsDelete', '=', '0')->first();
+        if($state == false)
+        {
+            $st = State::where('state_id', $request->state_id)
+                    ->update(['state_name' => $request->state_name, 'UpdatedBy' => $sid, 'UpdateDTTM' => $date]);
+
+            if ($st == true)
+            {
+                $data = array();
+                $data['success'] = '1';
+                $data['error'] = 'fasle';
+                $data['message'] = 'Updated Successfully';
+                return json_encode($data);
+            } 
+            else 
+            {
+                $data = array();
+                $data['success'] = '0';
+                $data['error'] = 'true';
+                $data['message'] = 'Somthing Wrong!!';
+                return json_encode($data);
+            }
+        }else{
+            $data = array();
+            $data['success'] = '2';
+            $data['error'] = 'true';
+            $data['message'] = 'State is already exist';
+            return json_encode($data);
+        }
+    }
+
+    public function deleteState(Request $request)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $date = date('Y-m-d H:i:s');
+    
+        $ds = State::where('state_id', $request->id)->update(['IsDelete' => '1', 'UpdatedBy' => $sid, 'UpdateDTTM' => $date]);
+
+        if ($ds == true)
+        {
+            $data = array();
+            $data['success'] = '1';
+            $data['error'] = 'fasle';
+            $data['message'] = 'Deleted Successfully';
+            return json_encode($data);
+        } 
+        else 
+        {
+            $data = array();
+            $data['success'] = '0';
+            $data['error'] = 'true';
+            $data['message'] = 'Somthing Wrong!!';
+            return json_encode($data);
+        }
+    }
+
+    ////////////////////////// END State //////////////////////////
+
+    ////////////////////////// District //////////////////////////
+
+    public function viewDistrict()
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+
+        if($RoleId == 1)
+        {
+           /* $school = DB::table('school_master')->where('trusty_sid', $sid)->first();
+            $school_id = $school->school_id;*/
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+            // echo "HiiElse".$school_id;exit;
+        }
+
+        $states = State::where('IsDelete', '=', '0')
+            ->orderby('state_id', 'asc')
+            ->get();
+
+        $districts = District::select('district_master.*', 'state_name')
+            ->join('state_master', 'state_master.state_id', '=', 'district_master.state_id')
+            ->where('district_master.IsDelete', '=', '0')
+            ->orderby('district_master.state_id', 'asc')
+            ->get();
+
+        return view('school.district', compact('districts', 'states', 'school_id', 'year_id'));
+    }
+
+    public function addDistrict(Request $request) 
+    {
+        $data = Session::all();
+        $sid = $data['sid'];
+
+        $district = District::Where('state_id', $request->state_id)
+                ->Where('district_name', $request->district_name)
+                ->where('IsDelete', '=', '0')
+                ->first();
+        if($district == false)
+        {
+            $cl = new District();
+            $cl->state_id = $request->state_id;
+            $cl->district_name = $request->district_name;
+            $cl->CreatedBy = $sid;
+            $cl->save();
+            
+            if ($cl == true)
+            {
+                $data = array();
+                $data['success'] = '1';
+                $data['error'] = 'fasle';
+                $data['message'] = 'Inserted Successfully';
+                return json_encode($data);
+            } 
+            else 
+            {
+                $data = array();
+                $data['success'] = '0';
+                $data['error'] = 'true';
+                $data['message'] = 'Somthing Wrong!!';
+                return json_encode($data);
+            }
+        }else{
+            $data = array();
+            $data['success'] = '2';
+            $data['error'] = 'true';
+            $data['message'] = 'District is already exist';
+            return json_encode($data);
+        }
+    }
+
+    public function editDistrict($id)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $states = State::where('IsDelete', '=', '0')
+            ->orderby('state_id', 'asc')
+            ->get();
+
+        $district = District::where('district_id', '=', $id)
+            ->where('IsDelete', '=', '0')
+            ->first();
+
+        return view('school.edit_district',compact('district', 'states', 'school_id', 'year_id'));
+    }
+
+    public function updateDistrict(Request $request)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+        $date = date('Y-m-d H:i:s');
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $district = District::Where('state_id', $request->state_id)
+                ->Where('district_name', $request->district_name)
+                ->where('IsDelete', '=', '0')
+                ->first();
+
+        if($district == false)
+        {
+        
+            $ds = District::where('district_id', $request->district_id)
+                    ->update(['state_id' => $request->state_id, 'district_name' => $request->district_name, 'UpdatedBy' => $sid, 'UpdateDTTM' => $date]);
+
+            if ($ds == true)
+            {
+                $data = array();
+                $data['success'] = '1';
+                $data['error'] = 'fasle';
+                $data['message'] = 'Updated Successfully';
+                return json_encode($data);
+            } 
+            else 
+            {
+                $data = array();
+                $data['success'] = '0';
+                $data['error'] = 'true';
+                $data['message'] = 'Somthing Wrong!!';
+                return json_encode($data);
+            }
+        }else{
+            $data = array();
+            $data['success'] = '2';
+            $data['error'] = 'true';
+            $data['message'] = 'District is already exist';
+            return json_encode($data);
+        }
+    }
+
+    public function deleteDistrict(Request $request)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $date = date('Y-m-d H:i:s');
+    
+        $dcd = District::where('district_id', $request->id)->update(['IsDelete' => '1', 'UpdatedBy' => $sid, 'UpdateDTTM' => $date]);
+
+        if ($dcd == true)
+        {
+            $data = array();
+            $data['success'] = '1';
+            $data['error'] = 'fasle';
+            $data['message'] = 'Deleted Successfully';
+            return json_encode($data);
+        } 
+        else 
+        {
+            $data = array();
+            $data['success'] = '0';
+            $data['error'] = 'true';
+            $data['message'] = 'Somthing Wrong!!';
+            return json_encode($data);
+        }
+    }
+
+    ////////////////////////// End District //////////////////////////
+
+    ////////////////////////// Religion //////////////////////////
+
+    public function viewReligion()
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $religions = Religion::select('religion_master.*')
+            ->where('IsDelete', '=', '0')
+            ->orderby('ReligionId', 'asc')
+            ->get();
+
+        return view('school.religion', compact('religions', 'school_id', 'year_id'));
+    }
+
+    public function addReligion(Request $request) 
+    {
+        $data = Session::all();
+        $sid = $data['sid'];
+
+        $religion = Religion::Where('ReligionName', $request->ReligionName)
+                ->where('IsDelete', '=', '0')
+                ->first();
+
+        if($religion == false)
+        {
+            $rg = new Religion();
+            $rg->ReligionName = $request->ReligionName;
+            $rg->CreatedBy = $sid;
+            $rg->save();
+            
+            if ($rg == true)
+            {
+                $data = array();
+                $data['success'] = '1';
+                $data['error'] = 'fasle';
+                $data['message'] = 'Inserted Successfully';
+                return json_encode($data);
+            } 
+            else 
+            {
+                $data = array();
+                $data['success'] = '0';
+                $data['error'] = 'true';
+                $data['message'] = 'Somthing Wrong!!';
+                return json_encode($data);
+            }
+        }else{
+            $data = array();
+            $data['success'] = '2';
+            $data['error'] = 'true';
+            $data['message'] = 'Religion is already exist';
+            return json_encode($data);
+        }
+    }
+
+    public function editReligion($id)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $religion = Religion::where('ReligionId', '=', $id)
+            ->where('IsDelete', '=', '0')
+            ->first();
+
+        return view('school.edit_religion',compact('religion', 'school_id', 'year_id'));
+    }
+
+    public function updateReligion(Request $request)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+        $date = date('Y-m-d H:i:s');
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $religion = Religion::Where('ReligionName', $request->ReligionName)->where('IsDelete', '=', '0')->first();
+        if($religion == false)
+        {
+            $rg = Religion::where('ReligionId', $request->ReligionId)
+                    ->update(['ReligionName' => $request->ReligionName, 'UpdatedBy' => $sid, 'UpdateDTTM' => $date]);
+
+            if ($rg == true)
+            {
+                $data = array();
+                $data['success'] = '1';
+                $data['error'] = 'fasle';
+                $data['message'] = 'Updated Successfully';
+                return json_encode($data);
+            } 
+            else 
+            {
+                $data = array();
+                $data['success'] = '0';
+                $data['error'] = 'true';
+                $data['message'] = 'Somthing Wrong!!';
+                return json_encode($data);
+            }
+        }else{
+            $data = array();
+            $data['success'] = '2';
+            $data['error'] = 'true';
+            $data['message'] = 'Religion is already exist';
+            return json_encode($data);
+        }
+    }
+
+    public function deleteReligion(Request $request)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $date = date('Y-m-d H:i:s');
+    
+        $rg = Religion::where('ReligionId', $request->id)->update(['IsDelete' => '1', 'UpdatedBy' => $sid, 'UpdateDTTM' => $date]);
+
+        if ($rg == true)
+        {
+            $data = array();
+            $data['success'] = '1';
+            $data['error'] = 'fasle';
+            $data['message'] = 'Deleted Successfully';
+            return json_encode($data);
+        } 
+        else 
+        {
+            $data = array();
+            $data['success'] = '0';
+            $data['error'] = 'true';
+            $data['message'] = 'Somthing Wrong!!';
+            return json_encode($data);
+        }
+    }
+
+    ////////////////////////// END Religion //////////////////////////
+
+    ////////////////////////// Subject //////////////////////////
+
+    public function viewSubject()
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $subjects = Subject::select('subject.*')
+            ->where('school_id', '=', $school_id)
+            ->where('is_delete', '=', '0')
+            ->orderby('id', 'asc')
+            ->get();
+
+        return view('school.subject', compact('subjects', 'school_id', 'year_id'));
+    }
+
+    public function addSubject(Request $request) 
+    {
+        $data = Session::all();
+        $sid = $data['sid'];
+        $RoleId = $data['RoleId'];
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $religion = Subject::Where('subject', $request->subject)
+                ->where('school_id', '=', $school_id)
+                ->where('is_delete', '=', '0')
+                ->first();
+
+        if($religion == false)
+        {
+            $rg = new Subject();
+            $rg->subject = $request->subject;
+            $rg->school_id = $school_id;
+            $rg->save();
+            
+            if ($rg == true)
+            {
+                $data = array();
+                $data['success'] = '1';
+                $data['error'] = 'fasle';
+                $data['message'] = 'Inserted Successfully';
+                return json_encode($data);
+            } 
+            else 
+            {
+                $data = array();
+                $data['success'] = '0';
+                $data['error'] = 'true';
+                $data['message'] = 'Somthing Wrong!!';
+                return json_encode($data);
+            }
+        }else{
+            $data = array();
+            $data['success'] = '2';
+            $data['error'] = 'true';
+            $data['message'] = 'Subject is already exist';
+            return json_encode($data);
+        }
+    }
+
+    public function editSubject($id)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $subjects = Subject::where('id', '=', $id)
+            ->where('school_id', '=', $school_id)
+            ->where('is_delete', '=', '0')
+            ->first();
+
+        return view('school.edit_subject',compact('subjects', 'school_id', 'year_id'));
+    }
+
+    public function updateSubject(Request $request)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+        $date = date('Y-m-d H:i:s');
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $subject = Subject::Where('subject', $request->subject)->where('school_id', '=', $school_id)->where('is_delete', '=', '0')->first();
+        if($subject == false)
+        {
+            $sb = Subject::where('id', $request->id)
+                    ->update(['subject' => $request->subject]);
+
+            if ($sb == true)
+            {
+                $data = array();
+                $data['success'] = '1';
+                $data['error'] = 'fasle';
+                $data['message'] = 'Updated Successfully';
+                return json_encode($data);
+            } 
+            else 
+            {
+                $data = array();
+                $data['success'] = '0';
+                $data['error'] = 'true';
+                $data['message'] = 'Somthing Wrong!!';
+                return json_encode($data);
+            }
+        }else{
+            $data = array();
+            $data['success'] = '2';
+            $data['error'] = 'true';
+            $data['message'] = 'Subject is already exist';
+            return json_encode($data);
+        }
+    }
+
+    public function deleteSubject(Request $request)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $date = date('Y-m-d H:i:s');
+    
+        $rg = Subject::where('id', $request->id)->update(['is_delete' => '1']);
+
+        if ($rg == true)
+        {
+            $data = array();
+            $data['success'] = '1';
+            $data['error'] = 'fasle';
+            $data['message'] = 'Deleted Successfully';
+            return json_encode($data);
+        } 
+        else 
+        {
+            $data = array();
+            $data['success'] = '0';
+            $data['error'] = 'true';
+            $data['message'] = 'Somthing Wrong!!';
+            return json_encode($data);
+        }
+    }
+
+    ////////////////////////// END Subject //////////////////////////
+
+
+    ////////////////////////// School Holiday //////////////////////////
+
+    public function viewSchoolHoliday()
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+
+        $year_id = $_COOKIE['year'];
+        // echo $year_id;exit;
+
+        if($RoleId == 1)
+        {
+           /* $school = DB::table('school_master')->where('trusty_sid', $sid)->first();
+            $school_id = $school->school_id;*/
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+            // echo "HiiElse".$school_id;exit;
+        }
+
+        $schoolHolidays = SchoolHoliday::select('holiday_master.*')
+            ->where('school_id', '=', $school_id)
+            ->where('year_id', '=', $year_id)
+            ->where('is_delete', '=', '0')
+            ->orderby('holiday_id', 'asc')
+            ->get();
+
+        return view('school.school_holiday', compact('schoolHolidays', 'school_id', 'year_id'));
+    }
+
+    public function addSchoolHoliday(Request $request) 
+    {
+        $data = Session::all();
+        $sid = $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $schoolHoliday = SchoolHoliday::where('school_id', $request->school_id)
+                ->Where('year_id', $request->year_id)
+                ->Where('holiday_date', $request->holiday_date)
+                ->Where('holiday_name', $request->holiday_name)
+                ->where('is_delete', '=', '0')
+                ->first();
+
+        if($schoolHoliday == false)
+        {
+            $sh = new SchoolHoliday();
+            $sh->holiday_date = $request->holiday_date;
+            $sh->holiday_name = $request->holiday_name;
+            $sh->school_id = $school_id;
+            $sh->year_id = $year_id;
+            $sh->save();
+            
+            if ($sh == true)
+            {
+                $data = array();
+                $data['success'] = '1';
+                $data['error'] = 'fasle';
+                $data['message'] = 'Inserted Successfully';
+                return json_encode($data);
+            } 
+            else 
+            {
+                $data = array();
+                $data['success'] = '0';
+                $data['error'] = 'true';
+                $data['message'] = 'Somthing Wrong!!';
+                return json_encode($data);
+            }
+        }else{
+            $data = array();
+            $data['success'] = '2';
+            $data['error'] = 'true';
+            $data['message'] = 'School Holiday Date is already exist';
+            return json_encode($data);
+        }
+    }
+
+    public function editSchoolHoliday($id)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $holidays = SchoolHoliday::where('holiday_id', '=', $id)
+            ->where('is_delete', '=', '0')
+            ->first();
+
+        return view('school.edit_school_holiday',compact('holidays', 'school_id', 'year_id'));
+    }
+
+    public function updateSchoolHoliday(Request $request)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+        $date = date('Y-m-d H:i:s');
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $schoolHoliday = SchoolHoliday::where('school_id', $request->school_id)
+                ->Where('year_id', $request->year_id)
+                ->Where('holiday_date', $request->holiday_date)
+                ->Where('holiday_name', $request->holiday_name)
+                ->where('is_delete', '=', '0')
+                ->first();
+
+        if($schoolHoliday == false)
+        {
+        
+            $sh = SchoolHoliday::where('holiday_id', $request->holiday_id)
+                    ->update(['holiday_date' => $request->holiday_date, 'holiday_name' => $request->holiday_name]);
+
+            if ($sh == true)
+            {
+                $data = array();
+                $data['success'] = '1';
+                $data['error'] = 'fasle';
+                $data['message'] = 'Updated Successfully';
+                return json_encode($data);
+            } 
+            else 
+            {
+                $data = array();
+                $data['success'] = '0';
+                $data['error'] = 'true';
+                $data['message'] = 'Somthing Wrong!!';
+                return json_encode($data);
+            }
+        }else{
+            $data = array();
+            $data['success'] = '2';
+            $data['error'] = 'true';
+            $data['message'] = 'School Holiday is already exist';
+            return json_encode($data);
+        }
+    }
+
+    public function deleteSchoolHoliday(Request $request)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+    
+        $dcd = SchoolHoliday::where('holiday_id', $request->id)->update(['is_delete' => '1']);
+
+        if ($dcd == true)
+        {
+            $data = array();
+            $data['success'] = '1';
+            $data['error'] = 'fasle';
+            $data['message'] = 'Deleted Successfully';
+            return json_encode($data);
+        } 
+        else 
+        {
+            $data = array();
+            $data['success'] = '0';
+            $data['error'] = 'true';
+            $data['message'] = 'Somthing Wrong!!';
+            return json_encode($data);
+        }
+    }
+
+    ////////////////////////// End School Holiday //////////////////////////
+
+
+    ////////////////////////// Class Subject Allocation` //////////////////////////
+
+    public function viewClassSubject()
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+
+        if($RoleId == 1)
+        {
+           /* $school = DB::table('school_master')->where('trusty_sid', $sid)->first();
+            $school_id = $school->school_id;*/
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+            // echo "HiiElse".$school_id;exit;
+        }
+
+        $subjects = Subject::where('school_id', '=', $school_id)
+            ->where('is_delete', '=', '0')
+            ->orderby('id', 'asc')
+            ->get();
+
+        $classes = SchoolClass::where('school_id', '=', $school_id)
+            ->where('IsDelete', '=', '0')
+            ->orderby('ClassId', 'asc')
+            ->get();
+// \DB::enableQueryLog();
+
+        $subjectMaster = SubjectMaster::select('subject_master.*', 'class_master.ClassName', 'subject.subject')
+            ->join('class_master', 'class_master.ClassId', '=', 'subject_master.ClassId')
+            ->join('subject', 'subject.id', '=', 'subject_master.SubjectName')
+            ->where('subject_master.school_id', '=', $school_id)
+            ->where('subject_master.year_id', '=', $year_id)
+            ->where('subject_master.IsDelete', '=', '0')
+            ->orderby('subject_master.ClassId', 'asc')
+            ->get();
+// dd(\DB::getQueryLog());
+
+        return view('school.class_subject', compact('subjectMaster', 'classes', 'subjects', 'school_id', 'year_id'));
+    }
+
+    public function addClassSubject(Request $request) 
+    {
+        $data = Session::all();
+        $sid = $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+         $subjectMaster = SubjectMaster::where('school_id', $request->school_id)
+                ->Where('year_id', $request->year_id)
+                ->Where('ClassId', $request->ClassId)
+                ->Where('SubjectName', $request->SubjectName)
+                ->where('IsDelete', '=', '0')
+                ->first();
+
+        if($subjectMaster == false)
+        {
+            $sm = new SubjectMaster();
+            $sm->ClassId = $request->ClassId;
+            $sm->SubjectName = $request->SubjectName;
+            $sm->school_id = $request->school_id;
+            $sm->year_id = $request->year_id;
+            $sm->CreatedBy = $sid;
+            $sm->save();
+            
+            if ($sm == true)
+            {
+                $data = array();
+                $data['success'] = '1';
+                $data['error'] = 'fasle';
+                $data['message'] = 'Inserted Successfully';
+                return json_encode($data);
+            } 
+            else 
+            {
+                $data = array();
+                $data['success'] = '0';
+                $data['error'] = 'true';
+                $data['message'] = 'Somthing Wrong!!';
+                return json_encode($data);
+            }
+        }else{
+            $data = array();
+            $data['success'] = '2';
+            $data['error'] = 'true';
+            $data['message'] = 'Subject is already exist';
+            return json_encode($data);
+        }
+    }
+
+    public function editClassSubject($id)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $subjects = Subject::where('school_id', '=', $school_id)
+            ->where('is_delete', '=', '0')
+            ->orderby('id', 'asc')
+            ->get();
+
+        $classes = SchoolClass::where('school_id', '=', $school_id)
+            ->where('IsDelete', '=', '0')
+            ->orderby('ClassId', 'asc')
+            ->get();
+
+        $subjectMaster = SubjectMaster::where('SubjectId', '=', $id)
+            ->where('IsDelete', '=', '0')
+            ->first();
+
+        return view('school.edit_class_subject',compact('subjectMaster', 'classes', 'subjects', 'school_id', 'year_id'));
+    }
+
+    public function updateClassSubject(Request $request)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+        $date = date('Y-m-d H:i:s');
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $subjectMaster = SubjectMaster::where('school_id', $request->school_id)
+                ->Where('year_id', $request->year_id)
+                ->Where('ClassId', $request->ClassId)
+                ->Where('SubjectName', $request->SubjectName)
+                ->where('IsDelete', '=', '0')
+                ->first();
+
+        if($subjectMaster == false)
+        {
+        
+            $sm = SubjectMaster::where('SubjectId', $request->SubjectId)
+                    ->update(['ClassId' => $request->ClassId, 'SubjectName' => $request->SubjectName, 'UpdatedBy' => $sid, 'UpdateDTTM' => $date]);
+
+            if ($sm == true)
+            {
+                $data = array();
+                $data['success'] = '1';
+                $data['error'] = 'fasle';
+                $data['message'] = 'Updated Successfully';
+                return json_encode($data);
+            } 
+            else 
+            {
+                $data = array();
+                $data['success'] = '0';
+                $data['error'] = 'true';
+                $data['message'] = 'Somthing Wrong!!';
+                return json_encode($data);
+            }
+        }else{
+            $data = array();
+            $data['success'] = '2';
+            $data['error'] = 'true';
+            $data['message'] = 'Subject is already exist';
+            return json_encode($data);
+        }
+    }
+
+    public function deleteClassSubject(Request $request)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $date = date('Y-m-d H:i:s');
+    
+        $dcd = SubjectMaster::where('SubjectId', $request->id)->update(['IsDelete' => '1', 'UpdatedBy' => $sid, 'UpdateDTTM' => $date]);
+
+        if ($dcd == true)
+        {
+            $data = array();
+            $data['success'] = '1';
+            $data['error'] = 'fasle';
+            $data['message'] = 'Deleted Successfully';
+            return json_encode($data);
+        } 
+        else 
+        {
+            $data = array();
+            $data['success'] = '0';
+            $data['error'] = 'true';
+            $data['message'] = 'Somthing Wrong!!';
+            return json_encode($data);
+        }
+    }
+
+    ////////////////////////// End Class Subject Allocation //////////////////////////
+
 }

@@ -45,3 +45,46 @@ Route::post('division/adddivision',[SchoolController::class, 'addDivision']);
 Route::get('division/{id}/edit',[SchoolController::class, 'editDivision']);
 Route::post('division/updatedivision',[SchoolController::class, 'updateDivision']);
 Route::post('deletedivision',[SchoolController::class, 'deleteDivision']);
+
+//State
+Route::get('state',[SchoolController::class, 'viewState']);
+Route::post('state/addstate',[SchoolController::class, 'addState']);
+Route::get('state/{id}/edit',[SchoolController::class, 'editState']);
+Route::post('state/updatestate',[SchoolController::class, 'updateState']);
+Route::post('deletestate',[SchoolController::class, 'deleteState']);
+
+//District
+Route::get('district',[SchoolController::class, 'viewDistrict']);
+Route::post('district/adddistrict',[SchoolController::class, 'addDistrict']);
+Route::get('district/{id}/edit',[SchoolController::class, 'editDistrict']);
+Route::post('district/updatedistrict',[SchoolController::class, 'updateDistrict']);
+Route::post('deletedistrict',[SchoolController::class, 'deleteDistrict']);
+
+//Religion
+Route::get('religion',[SchoolController::class, 'viewReligion']);
+Route::post('religion/addreligion',[SchoolController::class, 'addReligion']);
+Route::get('religion/{id}/edit',[SchoolController::class, 'editReligion']);
+Route::post('religion/updatereligion',[SchoolController::class, 'updateReligion']);
+Route::post('deletereligion',[SchoolController::class, 'deleteReligion']);
+
+//Subject
+Route::get('subject',[SchoolController::class, 'viewSubject']);
+Route::post('subject/addsubject',[SchoolController::class, 'addSubject']);
+Route::get('subject/{id}/edit',[SchoolController::class, 'editSubject']);
+Route::post('subject/updatesubject',[SchoolController::class, 'updateSubject']);
+Route::post('deletesubject',[SchoolController::class, 'deleteSubject']);
+
+
+//subject Class Allocation
+Route::get('allocateClassSubject',[SchoolController::class, 'viewClassSubject']);
+Route::post('allocateClassSubject/addClassSubject',[SchoolController::class, 'addClassSubject']);
+Route::get('allocateClassSubject/{id}/edit',[SchoolController::class, 'editClassSubject']);
+Route::post('allocateClassSubject/updateClassSubject',[SchoolController::class, 'updateClassSubject']);
+Route::post('deleteClassSubject',[SchoolController::class, 'deleteClassSubject']);
+
+//School Holiday
+Route::get('holidays',[SchoolController::class, 'viewSchoolHoliday']);
+Route::post('holidays/addHoliday',[SchoolController::class, 'addSchoolHoliday']);
+Route::get('holidays/{id}/edit',[SchoolController::class, 'editSchoolHoliday']);
+Route::post('holidays/updateHoliday',[SchoolController::class, 'updateSchoolHoliday']);
+Route::post('deleteHoliday',[SchoolController::class, 'deleteSchoolHoliday']);

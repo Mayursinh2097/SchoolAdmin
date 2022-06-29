@@ -6,7 +6,7 @@
     <ul class="breadcrumb">
         <li><a href="#">Home</a></li>
         <li>School</li>
-        <li class="active">Edit Division</li>
+        <li class="active">Edit School Holiday</li>
     </ul>
     <!-- END BREADCRUMB --   >           
 
@@ -17,33 +17,29 @@
                 <form id="add_role_form" class="form-horizontal" enctype="multipart/form-data" >
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title"><strong>Edit Division</strong> </h3>
+                            <h3 class="panel-title"><strong>Edit School Holiday</strong> </h3>
                             <ul class="panel-controls">
-                                <li><a href="{{ url('/division') }}" class="panel-remove" title="Cancel"><span class="fa fa-times"></span></a></li>
+                                <li><a href="{{ url('/holidays') }}" class="panel-remove" title="Cancel"><span class="fa fa-times"></span></a></li>
                             </ul>
                         </div>
                         <div class="panel-body">
                             <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Class Name</label>
+                                <label class="col-md-3 col-xs-12 control-label">Holiday Date</label>
                                 <div class="col-md-6 col-xs-12">                                            
-                                    <select class="form-control" name="ClassId" id="ClassId">
-                                        <option value="">Select</option>
-                                        <?php   
-                                            foreach($classes as $key => $cl){
-                                        ?> 
-                                            <option value="<?php echo $cl->ClassId; ?>"<?php if($division->ClassId==$cl->ClassId){ echo "selected"; } ?>> <?php echo $cl->ClassName; ?></option>
-                                        <?php } ?> 
-                                    </select>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="date" class="form-control" id="holiday_date" name="holiday_date" value="{{ $holidays->holiday_date }}">
+                                    </div>                                            
                                     <span class="help-block">Fill up the text field</span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Division Name</label>
+                                <label class="col-md-3 col-xs-12 control-label">Holiday Name</label>
                                 <div class="col-md-6 col-xs-12">                                            
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" id="DivisionName" name="DivisionName" value="{{ $division->DivisionName }}">
-                                        <input type="hidden" class="form-control" id="DivisionId" name="DivisionId" value="{{ $division->DivisionId }}" />
+                                        <input type="text" class="form-control" id="holiday_name" name="holiday_name" value="{{ $holidays->holiday_name }}">
+                                        <input type="hidden" class="form-control" id="holiday_id" name="holiday_id" value="{{ $holidays->holiday_id }}" />
                                     </div>                                            
                                     <span class="help-block">Fill up the text field</span>
                                 </div>
@@ -63,7 +59,7 @@
             <div class="mb-middle">
                 <div class="mb-title"><span class="fa fa-check"></span> Success</div>
                 <div class="mb-content">
-                    <p style="font-size: 15px;">Division edited successfully.</p>
+                    <p style="font-size: 15px;">School Holiday edited successfully.</p>
                 </div>
                 <div class="mb-footer"></div>
             </div>
@@ -75,7 +71,7 @@
             <div class="mb-middle">
                 <div class="mb-title"><span class="fa fa-times"></span>Error</div>
                 <div class="mb-content">
-                    <p> Division already inserted.</p>
+                    <p> School Holiday Date already inserted.</p>
                 </div>
                 <div class="mb-footer">
                     <!-- <button class="btn btn-default btn-lg pull-right mb-control-close">Close</button> -->
@@ -104,32 +100,32 @@
 
         var validator = $("#add_role_form").validate({
             rules: {
-                ClassId: { required: true },
-                DivisionName: { required: true } 
+                holiday_date: { required: true, },
+                holiday_name: { required: true, },
             },
             submitHandler: function(form) 
             { 
-                editDivision();
+                editHoliday();
             }
         });
-        function editDivision()
+        function editHoliday()
         {
-            var ClassId = $('#ClassId').val();
-                DivisionName = $('#DivisionName').val();
-                DivisionId = $('#DivisionId').val();
+            var holiday_date = $('#holiday_date').val();
+                holiday_name = $('#holiday_name').val();
+                holiday_id = $('#holiday_id').val();
                 school_id = '<?php echo $school_id; ?>';
                 year_id = '<?php echo $year_id; ?>';
                 // alert(school_id);
 
             var formData = new FormData($('#add_role_form')[0]);
-                formData.append("ClassId", ClassId);
-                formData.append("DivisionName", DivisionName);
+                formData.append("holiday_date", holiday_date);
+                formData.append("holiday_name", holiday_name);
                 formData.append("school_id", school_id);
                 formData.append("year_id", year_id);
-                formData.append("DivisionId", DivisionId);
+                formData.append("holiday_id", holiday_id);
 
             $.ajax({
-                url: "{{ url('division/updatedivision') }}",
+                url: "{{ url('holidays/updateHoliday') }}",
                 method: 'post',
                 contentType: false,
                 processData: false,
@@ -147,7 +143,7 @@
                         setTimeout(function(){ 
                             $("#message-box-success").modal('hide');
                         }, 1500);
-                        location.href="{{ url('/division') }}";
+                        location.href="{{ url('/holidays') }}";
                     }
                     else if(response.success==2)
                     {

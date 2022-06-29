@@ -2,44 +2,44 @@
 <li class="{{ Request::is('dashboard') ? 'active':'' }}">
     <a href="{{url('dashboard')}}" title="Dashboard"><span class="fa fa-desktop"></span> <span class="xn-text">Dashboard</span></a>                        
 </li> 
-<li class="xn-openable {{ Request::is('school*') ? 'active':'' }} || {{ Request::is('class*') ? 'active':'' }} || {{ Request::is('division*') ? 'active':'' }}">
-    <a href="#"><span class="fa fa-gears"></span> <span class="xn-text">School</span></a>
+<li class="xn-openable {{ Request::is('school*') ? 'active':'' }} || {{ Request::is('class*') ? 'active':'' }} || {{ Request::is('division*') ? 'active':'' }} || {{ Request::is('state*') ? 'active':'' }} || {{ Request::is('district*') ? 'active':'' }} || {{ Request::is('religion*') ? 'active':'' }} || {{ Request::is('subject*') ? 'active':'' }} || {{ Request::is('allocateClassSubject*') ? 'active':'' }} || {{ Request::is('lecture*') ? 'active':'' }} || {{ Request::is('advertisement*') ? 'active':'' }} || {{ Request::is('holidays*') ? 'active':'' }} || {{ Request::is('subjectPdf*') ? 'active':'' }}">
+    <a href="#" title="School"><span class="fa fa-gears"></span> <span class="xn-text">School</span></a>
     <ul>
         <li class="{{ Request::is('school*') ? 'active':'' }}">
             <a href="{{url('/school')}}" title="School Management"><span class="fa fa-circle-o"></span> School Management</a>
         </li>
-        <li class="{{ Request::is('class') ? 'active':'' }}">
+        <li class="{{ Request::is('class*') ? 'active':'' }}">
             <a href="{{url('/class')}}" title="Class Management"><span class="fa fa-circle-o"></span>Class Management</a>
         </li>
-        <li class="{{ Request::is('division') ? 'active':'' }}">
+        <li class="{{ Request::is('division*') ? 'active':'' }}">
             <a href="{{url('/division')}}" title="Division Management"><span class="fa fa-circle-o"></span>Division Management</a>
         </li>
-        <li class="{{ Request::is('add_state') ? 'active':'' }}">
-            <a href="{{url('/add_state')}}" title="State Management"><span class="fa fa-circle-o"></span>State Management</a>
+        <li class="{{ Request::is('state*') ? 'active':'' }}">
+            <a href="{{url('/state')}}" title="State Management"><span class="fa fa-circle-o"></span>State Management</a>
         </li>
-        <li class="{{ Request::is('add_district') ? 'active':'' }}">
-            <a href="{{url('/add_district')}}" title="District Management"><span class="fa fa-circle-o"></span>District Management</a>
+        <li class="{{ Request::is('district*') ? 'active':'' }}">
+            <a href="{{url('/district')}}" title="District Management"><span class="fa fa-circle-o"></span>District Management</a>
         </li>
-        <li class="{{ Request::is('add_religion') ? 'active':'' }}">
-            <a href="{{url('/add_religion')}}" title="Religion Management"><span class="fa fa-circle-o"></span>Religion Management</a>
+        <li class="{{ Request::is('religion*') ? 'active':'' }}">
+            <a href="{{url('/religion')}}" title="Religion Management"><span class="fa fa-circle-o"></span>Religion Management</a>
         </li>
-        <li class="{{ Request::is('subject') ? 'active':'' }}">
+        <li class="{{ Request::is('subject*') ? 'active':'' }}">
             <a href="{{url('/subject')}}" title="Subject Management"><span class="fa fa-circle-o"></span>Subject Management</a>
         </li>
-        <li class="{{ Request::is('subject_class') ? 'active':'' }}">
-            <a href="{{url('/subject_class')}}" title="Class Subject Allocation"><span class="fa fa-circle-o"></span>Class Subject Allocation</a>
+        <li class="{{ Request::is('allocateClassSubject*') ? 'active':'' }}">
+            <a href="{{url('/allocateClassSubject')}}" title="Class Subject Allocation"><span class="fa fa-circle-o"></span>Class Subject Allocation</a>
         </li>
-        <li class="{{ Request::is('lecture') ? 'active':'' }}">
+        <li class="{{ Request::is('lecture*') ? 'active':'' }}">
             <a href="{{url('/lecture')}}" title="Lecture Management"><span class="fa fa-circle-o"></span>Lecture Management</a>
         </li>
-        <li class="{{ Request::is('advertisement') ? 'active':'' }}">
+        <li class="{{ Request::is('advertisement*') ? 'active':'' }}">
             <a href="{{url('/advertisement')}}" title="Advertisement"><span class="fa fa-circle-o"></span>Advertisement</a>
         </li>
-        <li class="{{ Request::is('school_holiday') ? 'active':'' }}">
-            <a href="{{url('/school_holiday')}}" title="Holiday"><span class="fa fa-circle-o"></span>Holiday</a>
+        <li class="{{ Request::is('holidays*') ? 'active':'' }}">
+            <a href="{{url('/holidays')}}" title="Holiday"><span class="fa fa-circle-o"></span>Holiday</a>
         </li>
-        <li class="{{ Request::is('sub_pdf') ? 'active':'' }}">
-            <a href="{{url('/sub_pdf')}}" title="Subject PDF"><span class="fa fa-circle-o"></span>Subject PDF</a>
+        <li class="{{ Request::is('subjectPdf*') ? 'active':'' }}">
+            <a href="{{url('/subjectPdf')}}" title="Subject PDF"><span class="fa fa-circle-o"></span>Subject PDF</a>
         </li>
     </ul>
 </li>
