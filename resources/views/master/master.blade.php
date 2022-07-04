@@ -12,7 +12,7 @@
         $RoleId = session()->get('RoleId');
         $role = session()->get('role');
         $school_id = session()->get('school_id');
-        $photo = session()->get('photo');
+        $photo = session()->get('photo'); 
 
         $dataset_schoolall = DB::table('school_master')->select('school_id', 'schoolname')->where('trusty_sid', '=', $sid)->where('IsDelete', '=', '0')->where('status', '=', '0')->get();
 
