@@ -32,17 +32,28 @@
         <li class="{{ Request::is('lecture*') ? 'active':'' }}">
             <a href="{{url('/lecture')}}" title="Lecture Management"><span class="fa fa-circle-o"></span>Lecture Management</a>
         </li>
-        <li class="{{ Request::is('advertisement*') ? 'active':'' }}">
+        <!-- <li class="{{ Request::is('advertisement*') ? 'active':'' }}">
             <a href="{{url('/advertisement')}}" title="Advertisement"><span class="fa fa-circle-o"></span>Advertisement</a>
-        </li>
+        </li> -->
         <li class="{{ Request::is('holidays*') ? 'active':'' }}">
             <a href="{{url('/holidays')}}" title="Holiday"><span class="fa fa-circle-o"></span>Holiday</a>
         </li>
-        <li class="{{ Request::is('subjectPdf*') ? 'active':'' }}">
+        <!-- <li class="{{ Request::is('subjectPdf*') ? 'active':'' }}">
             <a href="{{url('/subjectPdf')}}" title="Subject PDF"><span class="fa fa-circle-o"></span>Subject PDF</a>
-        </li>
+        </li> -->
     </ul>
 </li>
+<li class="xn-openable {{ Request::is('studentAdd*') ? 'active':'' }} || {{ Request::is('students*') ? 'active':'' }}">
+    <a href="#" title="Student Details"><span class="fa fa-users"></span> <span class="xn-text">Student Details</span></a>
+        <ul>
+            <li class="{{ Request::is('studentAdd*') ? 'active':'' }}">
+                <a href="{{url('/studentAdd')}}" title="Add Student"><span class="fa fa-circle-o"></span>Add Student</a>
+            </li>
+            <li class="{{ Request::is('students*') ? 'active':'' }}">
+                <a href="{{url('/students')}}" title="Student Management"><span class="fa fa-circle-o"></span>Student Management</a>
+            </li>
+        </ul>
+    </li>
 <!--  <li class="{{ Request::is('offerlist*') ? 'active':'' }} ">
     <a href="{{url('/offerlist')}}"><span class="fa fa-list"></span> <span class="xn-text">Offer List</span></a>                        
 </li>  -->

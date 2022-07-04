@@ -13,6 +13,7 @@ use App\Models\Religion;
 use App\Models\Subject;
 use App\Models\SchoolHoliday;
 use App\Models\SubjectMaster;
+use App\Models\LectureTime;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
@@ -1497,7 +1498,7 @@ class SchoolController extends Controller
     ////////////////////////// End School Holiday //////////////////////////
 
 
-    ////////////////////////// Class Subject Allocation` //////////////////////////
+    ////////////////////////// Class Subject Allocation //////////////////////////
 
     public function viewClassSubject()
     {
@@ -1707,5 +1708,207 @@ class SchoolController extends Controller
     }
 
     ////////////////////////// End Class Subject Allocation //////////////////////////
+
+
+    ////////////////////////// Lecture //////////////////////////
+
+    public function viewLecture()
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+
+        if($RoleId == 1)
+        {
+           /* $school = DB::table('school_master')->where('trusty_sid', $sid)->first();
+            $school_id = $school->school_id;*/
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+            // echo "HiiElse".$school_id;exit;
+        }
+
+        $days = DB::table('day_master')
+            ->where('is_delete', '=', '0')
+            ->orderby('day_id', 'asc')
+            ->get();
+
+        $lectures = LectureTime::select('lecture_time.*', 'day')
+            ->join('day_master', 'day_master.day_id', '=', 'lecture_time.day_id')
+            ->where('school_id', '=', $school_id)
+            ->where('year_id', '=', $year_id)
+            ->where('lecture_time.is_delete', '=', '0')
+            ->orderby('lecture_id', 'asc')
+            ->get();
+
+        return view('school.lecture', compact('lectures', 'days', 'school_id', 'year_id'));
+    }
+
+    public function addLecture(Request $request) 
+    {
+        $data = Session::all();
+        $sid = $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $lecture = LectureTime::where('school_id', $request->school_id)
+                ->Where('year_id', $request->year_id)
+                ->Where('day_id', $request->day_id)
+                ->Where('lecture_name', $request->lecture_name)
+                ->where('is_delete', '=', '0')
+                ->first();
+
+        if($lecture == false)
+        {
+            $lt = new LectureTime();
+            $lt->day_id = $request->day_id;
+            $lt->lecture_name = $request->lecture_name;
+            $lt->start_time = $request->start_time;
+            $lt->end_time = $request->end_time;
+            $lt->school_id = $request->school_id;
+            $lt->year_id = $request->year_id;
+            $lt->save();
+            
+            if ($lt == true)
+            {
+                $data = array();
+                $data['success'] = '1';
+                $data['error'] = 'fasle';
+                $data['message'] = 'Inserted Successfully';
+                return json_encode($data);
+            } 
+            else 
+            {
+                $data = array();
+                $data['success'] = '0';
+                $data['error'] = 'true';
+                $data['message'] = 'Somthing Wrong!!';
+                return json_encode($data);
+            }
+        }else{
+            $data = array();
+            $data['success'] = '2';
+            $data['error'] = 'true';
+            $data['message'] = 'Lecture is already exist';
+            return json_encode($data);
+        }
+    }
+
+    public function editLecture($id)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $days = DB::table('day_master')
+            ->where('is_delete', '=', '0')
+            ->orderby('day_id', 'asc')
+            ->get();
+
+        $lecture = LectureTime::where('lecture_id', '=', $id)
+            ->where('is_delete', '=', '0')
+            ->first();
+
+        return view('school.edit_lecture',compact('lecture', 'days', 'school_id', 'year_id'));
+    }
+
+    public function updateLecture(Request $request)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
+        $date = date('Y-m-d H:i:s');
+
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $lecture = LectureTime::where('school_id', $request->school_id)
+                ->Where('year_id', $request->year_id)
+                ->Where('day_id', $request->day_id)
+                ->Where('lecture_name', $request->lecture_name)
+                ->Where('start_time', $request->start_time)
+                ->Where('end_time', $request->end_time)
+                ->where('is_delete', '=', '0')
+                ->first();
+
+        if($lecture == false)
+        {
+        
+            $lt = LectureTime::where('lecture_id', $request->lecture_id)
+                    ->update(['day_id' => $request->day_id, 'lecture_name' => $request->lecture_name, 'start_time' => $request->start_time, 'end_time' => $request->end_time]);
+
+            if ($lt == true)
+            {
+                $data = array();
+                $data['success'] = '1';
+                $data['error'] = 'fasle';
+                $data['message'] = 'Updated Successfully';
+                return json_encode($data);
+            } 
+            else 
+            {
+                $data = array();
+                $data['success'] = '0';
+                $data['error'] = 'true';
+                $data['message'] = 'Somthing Wrong!!';
+                return json_encode($data);
+            }
+        }else{
+            $data = array();
+            $data['success'] = '2';
+            $data['error'] = 'true';
+            $data['message'] = 'Lecture is already exist';
+            return json_encode($data);
+        }
+    }
+
+    public function deleteLecture(Request $request)
+    {
+        $data = Session::all();
+        $sid =  $data['sid'];
+        $date = date('Y-m-d H:i:s');
+    
+        $lt = LectureTime::where('lecture_id', $request->id)->update(['is_delete' => '1']);
+
+        if ($lt == true)
+        {
+            $data = array();
+            $data['success'] = '1';
+            $data['error'] = 'fasle';
+            $data['message'] = 'Deleted Successfully';
+            return json_encode($data);
+        } 
+        else 
+        {
+            $data = array();
+            $data['success'] = '0';
+            $data['error'] = 'true';
+            $data['message'] = 'Somthing Wrong!!';
+            return json_encode($data);
+        }
+    }
+
+    ////////////////////////// End Lecture //////////////////////////
 
 }
