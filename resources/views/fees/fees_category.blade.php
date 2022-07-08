@@ -188,7 +188,6 @@
                 description = $('#description').val();
                 school_id = '<?php echo $school_id; ?>';
                 year_id = '<?php echo $year_id; ?>';
-                // alert(school_id);
 
             var formData = new FormData($('#add_role_form')[0]);
                 formData.append("fee_category", fee_category);
