@@ -152,63 +152,31 @@ class FeesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) 
+    public function addCategory(Request $request) 
     {
         $data = Session::all();
         $sid = $data['sid'];
+        $RoleId = $data['RoleId'];
+        $year_id = $_COOKIE['year'];
 
-        $st = new Student();
-        $st->school_id = $request->school_id;
-        $st->StudentName = $request->name;
-        $st->Gender = $request->gender;
-        $st->dob = $request->dob;
-        $st->BirthPlace = $request->birth_place;
-        $st->AadharNumber = $request->aadhar_num;
-        $st->Photo = $request->photo;
-        $st->CategoryId = $request->category;
-        $st->ReligionId = $request->religious;
-        $st->FatherName = $request->father_name;
-        $st->FatherEducation = $request->father_edu;
-        $st->MotherName = $request->mother_name;
-        $st->MothersEucation = $request->mother_edu;
-        $st->FatherOccupation = $request->father_occupation;
-        $st->MotherOccupation = $request->mother_occupation;
-        $st->lblCaste = $request->lbl_caste;
-        $st->PermenantAddress = $request->p_address;
-        $st->CurrentAddress = $request->c_address;
-        $st->ContactNumber1 = $request->contact1;
-        $st->ContactNumber2 = $request->contact2;
-        $st->acc_number = $request->acc_number;
-        $st->bank_name = $request->bank_name;
-        $st->bank_branch = $request->bank_branch;
-        $st->AdmissionDate = $request->admission_date;
-        $st->FirstAdmission = $request->first_admission;
-        $st->PreviousSchoolId = $request->prev_school;
-        $st->PreGRNumber = $request->prev_gr;
-        $st->PreviousAttendedClassId = $request->prev_class;
-        $st->ClassId = $request->admission_class;
-        $st->DivisionId = $request->admission_div;
-        $st->MediumId = $request->lenguage_medium;
-        $st->GRNumber = $request->gr_number;
-        $st->DeviceID = $request->device_id;
-        $st->uid_number = $request->uid_number;
-        $st->age = $request->age;
-        $st->admission_year_id = $request->admission_year_id;
-        $st->type_admission = $request->type_admission;
-        $st->hostel_type = $request->hostel_type;
-        $st->cast = $request->cast;
-        $st->subcast = $request->subcast;
-        $st->ifsc_code = $request->ifsc_code;
-        $st->passbook_name = $request->passbook_name;
-        $st->prev_result = $request->prev_result;
-        $st->prev_grade = $request->prev_grade;
-        $st->bpl_card_num = $request->bpl_card_num;
-        $st->CreatedBy = $sid;
-        $st->save();
+        if($RoleId == 1)
+        {
+            $school_id = $_COOKIE['user'];
+        }else{
+            $school_id =  $data['school_id'];
+        }
+
+        $cg = new Category();
+        $cg->school_id = $request->school_id;
+        $cg->fee_category_name = $request->fee_category;
+        $cg->receipt_prefix = $request->receipt_no;
+        $cg->description = $request->description;
+        $cg->CreatedBy = $sid;
+        $cg->save();
         
-        $student_id = $st->id;
+        $student_id = $cg->id;
         
-        if ($st == true)
+        if ($cg == true)
         {
 
             $srn = new StudentRollNumber();
@@ -305,41 +273,6 @@ class FeesController extends Controller
                 ->where('StudentId', $id)->first();
 
         return view('student.edit_student',compact('students', 'classes', 'education', 'category', 'religions', 'mediums', 'year_id'));
-    }
-
-
-    public function imageUpload(Request $request)
-    {
-        // echo "Hii";exit;
-        $croped_image = $request->image;
-
-        list($type, $croped_image) = explode(';', $croped_image);
-        list(, $croped_image)      = explode(',', $croped_image);
-
-        $croped_image = base64_decode($croped_image);
-        $image_name= time().'.png';
-        $path = public_path() . "../file_upload/student/".$image_name;
-        /*file_put_contents($path, $croped_image);
-        return response()->json(['success'=>'done']);*/
-
-        if (($data = @file_put_contents($path, $croped_image)) === false) 
-        {
-            // $response['msg'] = $error['message'];
-
-            $data = array();
-            $data['success'] = '0';
-            $data['error'] = 'true';
-            $data['msg'] = $error['message'];
-            return json_encode($data);
-        }else{
-            $data = array();
-            $data['success'] = '1';
-            $data['error'] = 'false';
-            $data['image'] = $image_name;
-            return json_encode($data);
-
-            // $data  =  array('image' => $image_name);
-        }
     }
 
     /**
