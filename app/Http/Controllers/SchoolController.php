@@ -132,7 +132,7 @@ class SchoolController extends Controller
             $data = array();
             $data['success'] = '1';
             $data['error'] = 'fasle';
-            $data['message'] = 'Deleted Successfully';
+            $data['message'] = 'Inserted Successfully';
             return json_encode($data);
         } 
         else 

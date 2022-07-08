@@ -5,8 +5,8 @@
     <!-- START BREADCRUMB -->
     <ul class="breadcrumb">
         <li><a href="#">Home</a></li>
-        <li>School</li>
-        <li class="active">View Class</li>
+        <li>Fees</li>
+        <li class="active">View Category</li>
     </ul>
     <!-- END BREADCRUMB -->           
 
@@ -17,43 +17,39 @@
                 <form id="add_role_form" class="form-horizontal" enctype="multipart/form-data" >
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title"><strong>Add Class</strong> </h3>
+                            <h3 class="panel-title"><strong>Add Category</strong> </h3>
                             <ul class="panel-controls">
                             </ul>
                         </div>
                         <div class="panel-body">
                             <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Class Type</label>
+                                <label class="col-md-3 col-xs-12 control-label">Fee Category</label>
                                 <div class="col-md-6 col-xs-12">                                            
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <!-- <input type="text" class="form-control" id="class_type" name="class_type" maxlength="2"> -->
-                                        <input type="text" class="form-control" id="class_type" name="class_type">
+                                        <input type="text" class="form-control" id="fee_category" name="fee_category">
                                     </div>                                            
                                     <span class="help-block">Fill up the text field</span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Class Name</label>
+                                <label class="col-md-3 col-xs-12 control-label">Receipt No. Prefix</label>
                                 <div class="col-md-6 col-xs-12">                                            
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <!-- <input type="text" class="form-control" id="ClassName" name="ClassName" maxlength="2"> -->
-                                        <input type="text" class="form-control" id="ClassName" name="ClassName">
+                                        <input type="text" class="form-control" id="receipt_no" name="receipt_no">
                                     </div>                                            
                                     <span class="help-block">Fill up the text field</span>
                                 </div>
                             </div>
-                            <div class="form-group" id="stream_div" style="display: none;">
-                                <label class="col-md-3 col-xs-12 control-label">Stream</label>
-                                <div class="col-md-6 col-xs-12">
-                                    <select class="form-control" name="stream" id="stream">
-                                        <option value="">Select</option>   
-                                        <option value="Science">Science</option>   
-                                        <option value="Commerce">Commerce</option>   
-                                        <option value="Arts">Arts</option>   
-                                    </select>
-                                    <span class="help-block">Select stream</span>
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-12 control-label">Description</label>
+                                <div class="col-md-6 col-xs-12">                                            
+                                    <div class="input-group">
+                                        <span class="input-group-addon" style="vertical-align: middle;"><span class="fa fa-pencil"></span></span>
+                                        <textarea class="form-control" rows="2" id="description" name="description"></textarea>
+                                    </div>                                            
+                                    <span class="help-block">Fill up the text field</span>
                                 </div>
                             </div>
                         </div>
@@ -66,7 +62,7 @@
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">                                
-                        <h3 class="panel-title"><strong>View Class</strong> </h3>
+                        <h3 class="panel-title"><strong>View Category</strong> </h3>
                         <ul class="panel-controls"></ul>                                
                     </div>
                     <div class="panel-body">
@@ -74,30 +70,25 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Class Name</th>      
+                                    <th>Fee Category</th>      
+                                    <th>Receipt Number</th>      
+                                    <th>Description</th>      
                                     <th>Action</th>      
                                 </tr>
                             </thead>  
                             <tbody>
                             <?php 
                                 $i = 1;
-                                foreach ($classes as $key => $cl)
-                                {
-                                    if ($cl->ClassName == '11' || $cl->ClassName == '12') {
-                                        $class_name = $cl->ClassName." (".$cl->stream.")";
-                                    }
-                                    else
-                                    {
-                                        $class_name = $cl->ClassName;
-                                    }
-                                ?>
+                                foreach ($categorys as $key => $cg){ ?>
                                 <tr class="odd gradeX" >
-                                    <td class="center"> <?php echo $i;?></td>
-                                    <td class="center"> <?php echo $class_name;?></td>
+                                    <td class="center"> {{ $i }}</td>
+                                    <td class="center"> {{ $cg->fee_category_name }}</td>
+                                    <td class="center"> {{ $cg->receipt_prefix }}</td>
+                                    <td class="center"> {{ $cg->description }}</td>
                                     <td class="center">
-                                        <a href="{{url('class/'.$cl->ClassId.'/edit')}}" class="btn btn-primary btn-rounded" title="Edit"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
+                                        <a href="{{url('category/'.$cg->fee_category_id.'/edit')}}" class="btn btn-primary btn-rounded" title="Edit"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
 
-                                        <a  onclick="deleteClass('{{$cl->ClassId}}');" class="btn btn-primary btn-rounded" name="delete" id="delete" title="Delete"><i class="fa fa-trash-o"></i></a>
+                                        <a  onclick="deleteCategory('{{$cg->fee_category_id}}');" class="btn btn-primary btn-rounded" name="delete" id="delete" title="Delete"><i class="fa fa-trash-o"></i></a>
                                         <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
                                     </td>
                                 </tr> 
@@ -109,12 +100,14 @@
             </div>
         </div>                    
     </div>
+    <!-- PAGE CONTENT WRAPPER -->
+
     <div class="message-box message-box-success animated fadeIn" id="message-box-success">
         <div class="mb-container">
             <div class="mb-middle">
                 <div class="mb-title"><span class="fa fa-check"></span> Success</div>
                 <div class="mb-content">
-                    <p style="font-size: 15px;">Class added successfully.</p>
+                    <p style="font-size: 15px;">Category added successfully.</p>
                 </div>
                 <div class="mb-footer"></div>
             </div>
@@ -126,7 +119,7 @@
             <div class="mb-middle">
                 <div class="mb-title"><span class="fa fa-times"></span>Error</div>
                 <div class="mb-content">
-                    <p style="font-size: 15px;">Error to add class.</p>
+                    <p style="font-size: 15px;">Error to add Category.</p>
                 </div>
                 <div class="mb-footer"></div>
             </div>
@@ -138,19 +131,7 @@
             <div class="mb-middle">
                 <div class="mb-title"><span class="fa fa-times"></span>Error</div>
                 <div class="mb-content">
-                    <p style="font-size: 15px;">Class is already exist.</p>
-                </div>
-                <div class="mb-footer"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="message-box message-box-danger animated fadeIn" id="message-box-danger3">
-        <div class="mb-container">
-            <div class="mb-middle">
-                <div class="mb-title"><span class="fa fa-times"></span>Error</div>
-                <div class="mb-content">
-                    <p style="font-size: 15px;">This class is not alloweded in school.</p>
+                    <p style="font-size: 15px;">Category is already exist.</p>
                 </div>
                 <div class="mb-footer"></div>
             </div>
@@ -162,7 +143,7 @@
             <div class="mb-middle">
                 <div class="mb-title"><span class="fa fa-times"></span>Deleted</div>
                 <div class="mb-content">
-                    <p style="font-size: 15px;">Class deleted successfully.</p>
+                    <p style="font-size: 15px;">Category deleted successfully.</p>
                 </div>
                 <div class="mb-footer"></div>
             </div>
@@ -181,51 +162,43 @@
             </div>
         </div>
     </div>
-    <!-- PAGE CONTENT WRAPPER -->
+    @section('scripts')
+    
+    @endsection
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>  
     <script type="text/javascript" src="{{ asset('js/plugins/jquery-validation/jquery.validate.js') }}"></script>
     <script type="text/javascript">
 
-        $( "#ClassName" ).keyup(function() {
-            // alert( "Handler for .keyup() called." );
-            var class_name = $('#ClassName').val();
-            if (class_name == '11' || class_name == '12') {
-                $('#stream_div').show();
-            }
-            else{
-                $('#stream_div').hide();
-            }
-        });
-
         var validator = $("#add_role_form").validate({
             rules: {
-                ClassName: { required: true },
-                class_type: { required: true },
+                fee_category: { required: true },
+                receipt_no: { required: true },
+                description: { required: true },
             },
             submitHandler: function(form) 
             { 
-                addClass();
+                addCategory();
             }
         });
-        function addClass()
+        function addCategory()
         {
-            var class_type = $('#class_type').val();
-                ClassName = $('#ClassName').val();
-                stream = $('#stream').val();
+            var fee_category = $('#fee_category').val();
+                receipt_no = $('#receipt_no').val();
+                description = $('#description').val();
                 school_id = '<?php echo $school_id; ?>';
                 year_id = '<?php echo $year_id; ?>';
                 // alert(school_id);
 
             var formData = new FormData($('#add_role_form')[0]);
-                formData.append("class_type", class_type);
-                formData.append("ClassName", ClassName);
-                formData.append("stream", stream);
+                formData.append("fee_category", fee_category);
+                formData.append("receipt_no", receipt_no);
+                formData.append("description", description);
                 formData.append("school_id", school_id);
                 formData.append("year_id", year_id);
 
             $.ajax({
-                url: "{{ url('class/addClass') }}",
+                url: "{{ url('category/addCategory') }}",
                 method: 'post',
                 contentType: false,
                 processData: false,
@@ -253,14 +226,6 @@
                             location.reload();
                         }, 1500);
                     }
-                    else if(response.success==3)
-                    {
-                        $("#message-box-danger3").modal('show');
-                        setTimeout(function(){ 
-                            $("#message-box-danger3").modal('hide');
-                            location.reload();
-                        }, 1500);   
-                    }
                     else
                     {
                         $("#message-box-danger1").modal('show');
@@ -276,12 +241,12 @@
             });
         }
 
-        function deleteClass(id)
+        function deleteCategory(id)
         {
-            var checkstr =  confirm('Are you sure you want to delete Class ?');
+            var checkstr =  confirm('Are you sure you want to delete Category ?');
             if(checkstr == true){
                 $.ajax({
-                    url: "{{ url('/deleteclass') }}",
+                    url: "{{ url('/deleteCategory') }}",
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $("input[name='_token']").val()
@@ -296,7 +261,7 @@
                             // alert(data.msg);
                             $("#message-box-danger").modal('show');
                             setTimeout(function(){ $("#message-box-danger").modal('hide'); }, 1500);
-                            location.href="{{ url('/class') }}";
+                            location.href="{{ url('/category') }}";
                         }else{
                             // alert(data.msg);
                             $("#message-box-danger4").modal('show');
@@ -311,8 +276,5 @@
             }
             return false;
         }
-
-        
-
     </script>
 @endsection

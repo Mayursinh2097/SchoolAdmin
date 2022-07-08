@@ -8,7 +8,7 @@
         <li>School</li>
         <li class="active">Edit State</li>
     </ul>
-    <!-- END BREADCRUMB --   >           
+    <!-- END BREADCRUMB -->           
 
     <!-- PAGE CONTENT WRAPPER -->
     <div class="page-content-wrap">     
@@ -140,6 +140,9 @@
                     else
                     {
                         $("#message-box-danger45").modal('show');
+                        setTimeout(function(){ 
+                            $("#message-box-danger45").modal('hide');
+                        }, 1500);
                         return false;
                     }
                 },error: function(xhr, status, error) {

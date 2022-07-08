@@ -77,6 +77,7 @@ class AdminController extends Controller
             $role = DB::table('role_master')->select('role')->where('id', '=', $query->RollId)->first();
             
             session(['sid' => $query->UserId, 'name' => $query->UserName, 'RoleId' => $query->RollId, 'role' => $role->role, 'photo' => $query->photo, 'school_id' => $query->school_id]);
+            
             return Response::json(array('success' => true,'error_msg' => 'Login Successfully'), 200);
         }else{
             return Response::json(array('success' => false,'error_msg' => 'Invalid Username and Password'), 200);
