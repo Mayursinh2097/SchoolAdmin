@@ -148,4 +148,12 @@ Route::get('category/{id}/edit',[FeesController::class, 'editCategory']);
 Route::post('category/updateCategory',[FeesController::class, 'updateCategory']);
 Route::post('deleteCategory',[FeesController::class, 'deleteCategory']);
 
+//SubCategory
+Route::get('subcategory',[FeesController::class, 'viewSubCategory']);
+Route::get('subcategory/create',[FeesController::class, 'createSubCategory']);
+Route::post('subcategory/addSubCategory',[FeesController::class, 'addSubCategory']);
+Route::get('subcategory/{id}/edit',[FeesController::class, 'editSubCategory']);
+Route::post('subcategory/updateSubCategory',[FeesController::class, 'updateSubCategory']);
+Route::post('deleteSubCategory',[FeesController::class, 'deleteSubCategory']);
+
 ////////////////////////// END Fees Details //////////////////////////

@@ -682,15 +682,12 @@
     <script type='text/javascript' src="{{asset('js/plugins/icheck/icheck.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js')}}"></script> 
 
-    <script type="text/javascript" src="{{asset('js/plugins/bootstrap/bootstrap-datepicker.js')}}"></script>                
     <script type="text/javascript" src="{{asset('js/plugins/bootstrap/bootstrap-file-input.js')}}"></script>
     <script type="text/javascript" src="{{asset('js/plugins/bootstrap/bootstrap-select.js')}}"></script>
     <script type="text/javascript" src="{{asset('js/plugins/tagsinput/jquery.tagsinput.min.js')}}"></script>
 
     <script type='text/javascript' src="{{asset('js/plugins/validationengine/languages/jquery.validationEngine-en.js')}}"></script>
     <script type='text/javascript' src="{{asset('js/plugins/validationengine/jquery.validationEngine.js')}}"></script>
-
-    <script type="text/javascript" src="{{ asset('js/plugins/jquery-validation/jquery.validate.js') }}"></script>
 
     <script type='text/javascript' src="{{asset('js/plugins/maskedinput/jquery.maskedinput.min.js')}}"></script> 
     <script type="text/javascript">

@@ -8,7 +8,7 @@
         <li>School</li>
         <li class="active">Edit Lecture</li>
     </ul>
-    <!-- END BREADCRUMB --   >           
+    <!-- END BREADCRUMB -->           
 
     <!-- PAGE CONTENT WRAPPER -->
     <div class="page-content-wrap">     
@@ -19,7 +19,7 @@
                         <div class="panel-heading">
                             <h3 class="panel-title"><strong>Edit Lecture</strong> </h3>
                             <ul class="panel-controls">
-                                <li><a href="{{ url('/lecture') }}" class="panel-remove" title="Cancel"><span class="fa fa-times"></span></a></li>
+                                <li><a href="{{ url('/lecture') }}" title="Cancel"><span class="fa fa-times"></span></a></li>
                             </ul>
                         </div>
                         <div class="panel-body">

@@ -14,7 +14,8 @@
     <div class="page-content-wrap">     
         <div class="row">
             <div class="col-md-12">
-                <form id="add_role_form" class="form-horizontal" enctype="multipart/form-data" >
+                <form id="add_role_form" class="form-horizontal" enctype="multipart/form-data">
+                    {{csrf_field()}}
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title"><strong>Add Category</strong> </h3>
@@ -88,7 +89,7 @@
                                     <td class="center">
                                         <a href="{{url('category/'.$cg->fee_category_id.'/edit')}}" class="btn btn-primary btn-rounded" title="Edit"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
 
-                                        <a  onclick="deleteCategory('{{$cg->fee_category_id}}');" class="btn btn-primary btn-rounded" name="delete" id="delete" title="Delete"><i class="fa fa-trash-o"></i></a>
+                                        <a  onclick="deleteCategory('{{$cg->fee_category_id}}');" class="btn btn-danger btn-rounded" name="delete" id="delete" title="Delete"><i class="fa fa-trash-o"></i></a>
                                         <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
                                     </td>
                                 </tr> 

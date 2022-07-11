@@ -1682,7 +1682,8 @@ ul.panel-controls > li > a {
   width: 30px;
   height: 30px;
   text-align: center;
-  line-height: 28px;
+  /*line-height: 28px;*/
+  line-height: 25px;
   color: #22262e;
   border: 1px solid #BBB;
   -moz-border-radius: 20%;
@@ -1716,8 +1717,11 @@ ul.panel-controls > li > a.control-danger {
   border-color: #E04B4A;
 }
 ul.panel-controls > li > a:hover {
-  border-color: #999;
-  color: #1b1e24;
+  /*border-color: #999;
+  color: #1b1e24;*/
+  border-color: #000;
+  color: #ffffff;
+  background: #f00;
 }
 ul.panel-controls > li > a.rounded {
   -moz-border-radius: 0px;
@@ -1991,14 +1995,18 @@ ul.panel-controls > li > .dropdown-menu:before {
 }
 .btn-default {
   border-color: #DDD;
+  border-radius: 10px;
 }
 .btn-default:hover,
 .btn-default:focus,
 .btn-default:active,
 .btn-default.active,
 .open > .dropdown-toggle.btn-default {
-  background-color: #F5F5F5;
-  border-color: #DDD;
+  /*background-color: #F5F5F5;
+  border-color: #DDD;*/
+  background-color: #f00;
+  border-color: #fff;
+  color: #fff;
 }
 .btn-danger {
   background-color: #E04B4A;
@@ -2175,8 +2183,11 @@ ul.panel-controls > li > .dropdown-menu:before {
 .btn.btn-rounded.btn-danger:focus,
 .btn.btn-rounded.btn-danger:active,
 .btn.btn-rounded.btn-danger.active {
-  border-color: #a43f3e;
-  color: #a43f3e;
+  /*border-color: #a43f3e;
+  color: #a43f3e;*/
+    border-color: #ffffff;
+    color: #ffffff;
+    background: #f00;
 }
 .btn.btn-rounded.btn-primary {
   /*color: #1b1e24;*/
@@ -2189,7 +2200,7 @@ ul.panel-controls > li > .dropdown-menu:before {
   /*border-color: #101215;
   color: #101215;*/
 
-  border-color: #019806;
+  border-color: #ffffff;
   /*color: #101215;*/
   color: #fff;
   background-color: #019806;

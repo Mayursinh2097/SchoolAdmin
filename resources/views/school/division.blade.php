@@ -82,7 +82,7 @@
                                     <td class="center">
                                         <a href="{{url('division/'.$dv->DivisionId.'/edit')}}" class="btn btn-primary btn-rounded" title="Edit"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
 
-                                        <a  onclick="deleteDivision('{{$dv->DivisionId}}');" class="btn btn-primary btn-rounded" name="delete" id="delete" title="Delete"><i class="fa fa-trash-o"></i></a>
+                                        <a  onclick="deleteDivision('{{$dv->DivisionId}}');" class="btn btn-danger btn-rounded" name="delete" id="delete" title="Delete"><i class="fa fa-trash-o"></i></a>
                                         <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
                                     </td>
                                 </tr> 

@@ -63,19 +63,22 @@
 <li class="xn-openable {{ Request::is('teachers*') ? 'active':'' }}">
     <a href="#" title="Teacher Details"><span class="fa fa-users"></span> <span class="xn-text">Teacher Details</span></a>
     <ul>
-        <li class="{{ Request::is('teachers/create') ? 'active':'' }}">
+        <!-- <li class="{{ Request::is('teachers/create') ? 'active':'' }}">
             <a href="{{url('/teachers/create')}}" title="Add Teacher"><span class="fa fa-circle-o"></span>Add Teacher</a>
-        </li>
+        </li> -->
         <li class="{{ Request::is('teachers') ? 'active':'' }}">
             <a href="{{url('/teachers')}}" title="Teacher Management"><span class="fa fa-circle-o"></span>Teacher Management</a>
         </li>
     </ul>
 </li>
-<li class="xn-openable {{ Request::is('category*') ? 'active':'' }}">
+<li class="xn-openable {{ Request::is('category*') ? 'active':'' }} || {{ Request::is('subcategory*') ? 'active':'' }}">
     <a href="#" title="Teacher Details"><span class="fa fa-users"></span> <span class="xn-text">Fees Details</span></a>
     <ul>
-        <li class="{{ Request::is('category') ? 'active':'' }}">
+        <li class="{{ Request::is('category*') ? 'active':'' }}">
             <a href="{{url('/category')}}" title="Category"><span class="fa fa-circle-o"></span>Category</a>
+        </li>
+        <li class="{{ Request::is('subcategory*') ? 'active':'' }}">
+            <a href="{{url('/subcategory')}}" title="SubCategory"><span class="fa fa-circle-o"></span>SubCategory</a>
         </li>
     </ul>
 </li>
