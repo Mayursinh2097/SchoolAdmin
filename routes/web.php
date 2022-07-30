@@ -3,8 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\FeesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,13 +104,80 @@ Route::post('deleteHoliday',[SchoolController::class, 'deleteSchoolHoliday']);
 
 ////////////////////////// Student Details //////////////////////////
 
-//Student
+//Student Management
 Route::resource('/students', StudentController::class);
-Route::post('change_school_status',[StudentController::class, 'change_school_status']);
 Route::post('students/store',[StudentController::class, 'store']);
+Route::post('imageUpload',[StudentController::class, 'imageUpload'])->name('uploadImage');
 Route::post('students/update',[StudentController::class, 'update']);
-Route::post('deleteschool',[StudentController::class, 'destroy']);
+Route::post('deleteStudent',[StudentController::class, 'destroy']);
 Route::get('student/selectDiv',[StudentController::class, 'selectDiv']);
 Route::get('student/selectStudentDetails',[StudentController::class, 'selectStudentDetails']);
 
-////////////////////////// Student Details //////////////////////////
+//Student Roll Number
+Route::get('student/rollNumber',[StudentController::class, 'rollNumber']);
+Route::get('student/getStudents',[StudentController::class, 'getStudents']);
+Route::post('student/saveStudentRollNumber',[StudentController::class, 'saveStudentRollNumber']);
+
+//School LC
+Route::get('student/LC',[StudentController::class, 'viewStudents']);
+Route::get('student/getStudentsList',[StudentController::class, 'getStudentsList']);
+Route::get('student/addStudentLC/Id={id}&CL={cid}&StuName={name}',[StudentController::class, 'addStudentLC']);
+Route::post('student/addStudLC',[StudentController::class, 'addStudLC']);
+
+////////////////////////// END Student Details //////////////////////////
+
+////////////////////////// Teacher Details //////////////////////////
+
+//Teacher Management
+Route::resource('/teachers', TeacherController::class);
+Route::post('viewTeacher',[TeacherController::class, 'viewTeacher']);
+Route::post('teachers/store',[TeacherController::class, 'store']);
+Route::post('teachers/imageUpload',[TeacherController::class, 'imageUpload'])->name('teacherUploadImage');
+Route::post('teachers/update',[TeacherController::class, 'update']);
+Route::post('changeStatus',[TeacherController::class, 'changeStatus']);
+Route::post('deleteUser',[TeacherController::class, 'destroy']);
+
+////////////////////////// END Teacher Details //////////////////////////
+
+////////////////////////// Fees Details //////////////////////////
+
+//Category
+Route::get('category',[FeesController::class, 'viewCategory']);
+Route::post('category/addCategory',[FeesController::class, 'addCategory']);
+Route::get('category/{id}/edit',[FeesController::class, 'editCategory']);
+Route::post('category/updateCategory',[FeesController::class, 'updateCategory']);
+Route::post('deleteCategory',[FeesController::class, 'deleteCategory']);
+
+//SubCategory
+Route::get('subcategory',[FeesController::class, 'viewSubCategory']);
+Route::get('subcategory/create',[FeesController::class, 'createSubCategory']);
+Route::post('subcategory/addSubCategory',[FeesController::class, 'addSubCategory']);
+Route::get('subcategory/{id}/edit',[FeesController::class, 'editSubCategory']);
+Route::post('subcategory/updateSubCategory',[FeesController::class, 'updateSubCategory']);
+Route::post('deleteSubCategory',[FeesController::class, 'deleteSubCategory']);
+
+//Fees Allocation
+Route::get('feeAllocation',[FeesController::class, 'viewFeeAllocation']);
+Route::get('selectStudent',[FeesController::class, 'selectStudent']);
+Route::get('feeAllocation/selectSubCat',[FeesController::class, 'selectSubCat']);
+Route::post('feeAllocation/addFeeAllocation',[FeesController::class, 'addFeeAllocation']);
+Route::get('feeAllocation/{id}/edit',[FeesController::class, 'editFeeAllocation']);
+Route::post('feeAllocation/updateFeeAllocation',[FeesController::class, 'updateFeeAllocation']);
+Route::post('deletefeeAllocation',[FeesController::class, 'deleteFeeAllocation']);
+
+//Fees Template
+Route::get('feeTemplate',[FeesController::class, 'viewTemplate']);
+Route::post('feeTemplate/updateFeeTemplate',[FeesController::class, 'updateFeeTemplate']);
+Route::post('imageUpload',[FeesController::class, 'templateImageUpload'])->name('templateuploadImage');
+
+
+//Fees Collection
+Route::get('feeCollection',[FeesController::class, 'viewFeeCollection']);
+Route::get('getStudentDetail',[FeesController::class, 'getStudentDetail']);
+Route::post('select_pre_year_student_fees',[FeesController::class, 'select_pre_year_student_fees']);
+Route::post('feeCollection/addFeeCollection',[FeesController::class, 'addFeeCollection']);
+Route::get('feeCollection/{id}/edit',[FeesController::class, 'editFeeCollection']);
+Route::post('feeCollection/updateFeeCollection',[FeesController::class, 'updateFeeCollection']);
+Route::post('deleteFeeCollection',[FeesController::class, 'deleteFeeCollection']);
+
+////////////////////////// END Fees Details //////////////////////////

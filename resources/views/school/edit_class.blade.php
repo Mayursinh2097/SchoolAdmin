@@ -8,7 +8,7 @@
         <li>School</li>
         <li class="active">Edit Class</li>
     </ul>
-    <!-- END BREADCRUMB --   >           
+    <!-- END BREADCRUMB -->           
 
     <!-- PAGE CONTENT WRAPPER -->
     <div class="page-content-wrap">     
@@ -20,7 +20,7 @@
                         <div class="panel-heading">
                             <h3 class="panel-title"><strong>Edit Class</strong> </h3>
                             <ul class="panel-controls">
-                                <li><a href="{{url('class')}}" class="panel-remove" title="Cancel"><span class="fa fa-times"></span></a></li>
+                                <li><a href="{{url('class')}}" title="Cancel"><span class="fa fa-times"></span></a></li>
                             </ul>
                         </div>
                         <div class="panel-body">
@@ -84,7 +84,7 @@
             <div class="mb-middle">
                 <div class="mb-title"><span class="fa fa-times"></span>Error</div>
                 <div class="mb-content">
-                    <p> Class already inserted.</p>
+                    <p> Class already exist.</p>
                 </div>
                 <div class="mb-footer">
                     <!-- <button class="btn btn-default btn-lg pull-right mb-control-close">Close</button> -->

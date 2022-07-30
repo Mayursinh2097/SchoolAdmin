@@ -8,7 +8,7 @@
         <li>School</li>
         <li class="active">View School Holiday</li>
     </ul>
-    <!-- END BREADCRUMB --   >           
+    <!-- END BREADCRUMB -->           
 
     <!-- PAGE CONTENT WRAPPER -->
     <div class="page-content-wrap">     
@@ -79,7 +79,7 @@
                                     <td class="center">
                                         <a href="{{url('holidays/'.$sh->holiday_id.'/edit')}}" class="btn btn-primary btn-rounded" title="Edit"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
 
-                                        <a  onclick="deleteHoliday('{{$sh->holiday_id}}');" class="btn btn-primary btn-rounded" name="delete" id="delete" title="Delete"><i class="fa fa-trash-o"></i></a>
+                                        <a  onclick="deleteHoliday('{{$sh->holiday_id}}');" class="btn btn-danger btn-rounded" name="delete" id="delete" title="Delete"><i class="fa fa-trash-o"></i></a>
                                         <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
                                     </td>
                                 </tr> 

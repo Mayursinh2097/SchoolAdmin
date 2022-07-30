@@ -8,7 +8,7 @@
         <li>Student</li>
         <li class="active">View All Students</li>
     </ul>
-    <!-- END BREADCRUMB --   >           
+    <!-- END BREADCRUMB -->           
 
     <!-- PAGE CONTENT WRAPPER -->
     <div class="page-content-wrap">     
@@ -17,9 +17,6 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title"><strong>View All Students</strong> </h3>
-                        <ul class="panel-controls">
-                            <li><a href="{{ url('/students') }}" class="panel-remove" title="Cancel"><span class="fa fa-times"></span></a></li>
-                        </ul>
                     </div>
                     <div class="panel-body">
                         <div class="col-md-6">
@@ -45,7 +42,7 @@
                                     <select class="form-control" name="div_id" id="div_id">
                                         <option value="">Select Division</option>
                                     </select>
-                                    <span class="help-block">Select Class </span>
+                                    <span class="help-block">Select Division </span>
                                 </div>
                             </div>
                         </div>
@@ -106,7 +103,11 @@
             </div>
         </div>
     </div> 
+
     <!-- PAGE CONTENT WRAPPER -->
+    @section('scripts')
+    
+    @endsection
     <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="{{ asset('js/plugins/jquery-validation/jquery.validate.js') }}"></script>
@@ -134,7 +135,7 @@
                 url: "{{ url('student/selectDiv') }}",
                 type: 'get',
                 dataType: 'json',
-                data: {'school_id':school_id, 'class_id':class_id},
+                data: {'class_id':class_id},
                 success: function(response){
 
                     /*$("#div_id").empty();
@@ -232,7 +233,10 @@
                             html_data += '<td class="center">'+response.data[i].ContactNumber1+'</td>';
                             html_data += '<td class="center">'+gender+'</td>';
                             if (RoleId != 2) {
-                                html_data += '<td class="center"><a href="edit_student.php?id='+response.data[i].StudentId+'"  class="btn btn-primary btn-rounded" title="Edit"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;<a onClick="notyConfirm('+response.data[i].StudentId+');" style="cursor:pointer" class="btn btn-primary btn-rounded" title="Delete"><i class="fa fa-trash-o "></i></a></td>';
+                                var url = "{{url('students')}}/"+response.data[i].StudentId+'/edit';
+                                html_data += '<td class="center"><a href="'+url+'" class="btn btn-primary btn-rounded" title="Edit"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;<a onClick="deleteStudent('+response.data[i].StudentId+');" style="cursor:pointer" class="btn btn-primary btn-rounded" title="Delete"><i class="fa fa-trash-o "></i></a></td>';
+
+                                //html_data += '<td class="center"><a href="edit_student.php?id='+response.data[i].StudentId+'"  class="btn btn-primary btn-rounded" title="Edit"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;<a onClick="notyConfirm('+response.data[i].StudentId+');" style="cursor:pointer" class="btn btn-primary btn-rounded" title="Delete"><i class="fa fa-trash-o "></i></a></td>';
                             }
                             html_data += '</tr>';
                             j++;
@@ -255,12 +259,12 @@
             return false;
         }
 
-        function deleteLecture(id)
+        function deleteStudent(id)
         {
-            var checkstr =  confirm('Are you sure you want to delete Lecture ?');
+            var checkstr =  confirm('Are you sure you want to delete Student ?');
             if(checkstr == true){
                 $.ajax({
-                    url: "{{ url('/deleteLecture') }}",
+                    url: "{{ url('/deleteStudent') }}",
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $("input[name='_token']").val()
@@ -275,7 +279,7 @@
                             // alert(data.msg);
                             $("#message-box-danger").modal('show');
                             setTimeout(function(){ $("#message-box-danger").modal('hide'); }, 1500);
-                            location.href="{{ url('/lecture') }}";
+                            location.href="{{ url('/students') }}";
                         }else{
                             // alert(data.msg);
                             $("#message-box-danger4").modal('show');

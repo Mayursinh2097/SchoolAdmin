@@ -8,7 +8,7 @@
         <li>School</li>
         <li class="active">Edit State</li>
     </ul>
-    <!-- END BREADCRUMB --   >           
+    <!-- END BREADCRUMB -->           
 
     <!-- PAGE CONTENT WRAPPER -->
     <div class="page-content-wrap">     
@@ -19,7 +19,7 @@
                         <div class="panel-heading">
                             <h3 class="panel-title"><strong>Edit State</strong> </h3>
                             <ul class="panel-controls">
-                                <li><a href="{{ url('/states') }}" class="panel-remove" title="Cancel"><span class="fa fa-times"></span></a></li>
+                                <li><a href="{{ url('/states') }}" title="Cancel"><span class="fa fa-times"></span></a></li>
                             </ul>
                         </div>
                         <div class="panel-body">
@@ -140,6 +140,9 @@
                     else
                     {
                         $("#message-box-danger45").modal('show');
+                        setTimeout(function(){ 
+                            $("#message-box-danger45").modal('hide');
+                        }, 1500);
                         return false;
                     }
                 },error: function(xhr, status, error) {

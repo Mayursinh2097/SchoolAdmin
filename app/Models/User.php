@@ -19,15 +19,7 @@ class User extends Authenticatable
      */
     protected $table = 'user_master';
     protected $fillable = [
-        'UserName',
-        'school_id',
-        'RollId',
-        'Name',
-        'Address',
-        'email',
-        'ContactNumber1',
-        'ContactNumber2',
-        'Password',
+        'UserId', 'UserName', 'school_id', 'RollId', 'Name', 'Address', 'Gender', 'email', 'ContactNumber1', 'ContactNumber2', 'Password', 'photo', 'SchoolJoining', 'dob', 'PCNumber', 'DLNumber', 'GPFNumber', 'CPFNumber', 'SeniorityNumber', 'MandaniNumber', 'BankAccountNumber', 'BankName', 'BankBranch', 'BranchCode', 'VoterCardNumber', 'ShiftId', 'TeacherTypeId', 'EmploymentNumber', 'DeviceUserID', 'UniqueCode', 'PasswordCode', 'IMEINO', 'status', 'LastMilliSecond'
     ];
 
     /**
