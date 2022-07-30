@@ -477,7 +477,7 @@
                                         <div class="form-group">
                                             <label class="col-md-3 col-xs-12 control-label">Language Medium</label>
                                             <div class="col-md-9 col-xs-12">
-                                                <select class="form-control select" id="lenguage_medium" name="lenguage_medium">
+                                                <select class="form-control" id="lenguage_medium" name="lenguage_medium">
                                                     <option value="">Select</option>
                                                     <?php   
                                                         foreach($mediums as $key => $md){
@@ -534,7 +534,7 @@
                                             <label class="col-md-3 col-xs-12 control-label">Previous Attended Class</label>
                                             <div class="col-md-9 col-xs-12">
                                             <!-- <div class="input-group">   -->
-                                                <select class="form-control select" id="prev_class" name="prev_class">
+                                                <select class="form-control" id="prev_class" name="prev_class">
                                                     <option value="">Select</option>
                                                     <?php   
                                                         foreach($classes as $key => $cl){

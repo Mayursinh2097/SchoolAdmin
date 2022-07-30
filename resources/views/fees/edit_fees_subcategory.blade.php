@@ -576,6 +576,13 @@
     <!-- PAGE CONTENT WRAPPER -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="{{ asset('js/plugins/jquery-validation/jquery.validate.js') }}"></script>
+    <script type="text/javascript"> 
+        $('#amount').bind('keypress',function(e)
+         {
+            return ( e.which!=8 && e.which!=0 && (e.which<48 || e.which>57)) ? false : true ;
+         });
+        
+    </script>
     <script type="text/javascript">
 
         var validator = $("#add_role_form").validate({

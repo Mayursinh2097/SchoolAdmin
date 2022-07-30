@@ -156,4 +156,28 @@ Route::get('subcategory/{id}/edit',[FeesController::class, 'editSubCategory']);
 Route::post('subcategory/updateSubCategory',[FeesController::class, 'updateSubCategory']);
 Route::post('deleteSubCategory',[FeesController::class, 'deleteSubCategory']);
 
+//Fees Allocation
+Route::get('feeAllocation',[FeesController::class, 'viewFeeAllocation']);
+Route::get('selectStudent',[FeesController::class, 'selectStudent']);
+Route::get('feeAllocation/selectSubCat',[FeesController::class, 'selectSubCat']);
+Route::post('feeAllocation/addFeeAllocation',[FeesController::class, 'addFeeAllocation']);
+Route::get('feeAllocation/{id}/edit',[FeesController::class, 'editFeeAllocation']);
+Route::post('feeAllocation/updateFeeAllocation',[FeesController::class, 'updateFeeAllocation']);
+Route::post('deletefeeAllocation',[FeesController::class, 'deleteFeeAllocation']);
+
+//Fees Template
+Route::get('feeTemplate',[FeesController::class, 'viewTemplate']);
+Route::post('feeTemplate/updateFeeTemplate',[FeesController::class, 'updateFeeTemplate']);
+Route::post('imageUpload',[FeesController::class, 'templateImageUpload'])->name('templateuploadImage');
+
+
+//Fees Collection
+Route::get('feeCollection',[FeesController::class, 'viewFeeCollection']);
+Route::get('getStudentDetail',[FeesController::class, 'getStudentDetail']);
+Route::post('select_pre_year_student_fees',[FeesController::class, 'select_pre_year_student_fees']);
+Route::post('feeCollection/addFeeCollection',[FeesController::class, 'addFeeCollection']);
+Route::get('feeCollection/{id}/edit',[FeesController::class, 'editFeeCollection']);
+Route::post('feeCollection/updateFeeCollection',[FeesController::class, 'updateFeeCollection']);
+Route::post('deleteFeeCollection',[FeesController::class, 'deleteFeeCollection']);
+
 ////////////////////////// END Fees Details //////////////////////////

@@ -71,7 +71,7 @@
         </li>
     </ul>
 </li>
-<li class="xn-openable {{ Request::is('category*') ? 'active':'' }} || {{ Request::is('subcategory*') ? 'active':'' }}">
+<li class="xn-openable {{ Request::is('category*') ? 'active':'' }} || {{ Request::is('subcategory*') ? 'active':'' }} || {{ Request::is('feeAllocation*') ? 'active':'' }} || {{ Request::is('feeTemplate*') ? 'active':'' }} || {{ Request::is('feeCollection*') ? 'active':'' }}">
     <a href="#" title="Teacher Details"><span class="fa fa-users"></span> <span class="xn-text">Fees Details</span></a>
     <ul>
         <li class="{{ Request::is('category*') ? 'active':'' }}">
@@ -79,6 +79,15 @@
         </li>
         <li class="{{ Request::is('subcategory*') ? 'active':'' }}">
             <a href="{{url('/subcategory')}}" title="SubCategory"><span class="fa fa-circle-o"></span>SubCategory</a>
+        </li>
+        <li class="{{ Request::is('feeAllocation*') ? 'active':'' }}">
+            <a href="{{url('/feeAllocation')}}" title="Fees Allocation"><span class="fa fa-circle-o"></span>Fees Allocation</a>
+        </li>
+        <li class="{{ Request::is('feeTemplate*') ? 'active':'' }}">
+            <a href="{{url('/feeTemplate')}}" title="Fees Allocation"><span class="fa fa-circle-o"></span>Fees Template</a>
+        </li>
+        <li class="{{ Request::is('feeCollection*') ? 'active':'' }}">
+            <a href="{{url('/feeCollection')}}" title="Fees Allocation"><span class="fa fa-circle-o"></span>Fees Collection</a>
         </li>
     </ul>
 </li>
